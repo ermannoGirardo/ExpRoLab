@@ -12,6 +12,8 @@ The student has to develop a FSM in order to:
 Cluedo is a strategy table game playable from 2 to 6 players.
 In order to play there are two entities in our context: The robot that navigating in the map should acquire hints via QR code scanner, and the oracle an omniscient entity that knows the correct hypothesis.
 Following you can see a picture of the Cluedo Map.
+
+
 ![Cluedo_Map](https://user-images.githubusercontent.com/48509825/140074337-635a67c4-e5ed-4340-9403-d902389efe2e.jpg)
 
 
