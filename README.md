@@ -17,7 +17,7 @@ Following you can see a picture of the Cluedo Map.
 ![Cluedo_Map](https://user-images.githubusercontent.com/48509825/140074337-635a67c4-e5ed-4340-9403-d902389efe2e.jpg)
 
 
-How the hints works?
+How the hints work?
 In cluedo the player have to collect three types of hint: who is the murder, what is the weapon used to kill and where the murder was commmitted.
 Once a player have a completed hypotesis (one instance for each type) can go to the Cluedo Room and he says the hypothesis his has in mind.
 In the following image you can see the possibles hints for Cluedo game:
