@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.the_oracle &mdash; exproblab_assignment_1 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> exproblab_assignment_1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">exproblab_assignment_1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.the_oracle</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.the_oracle</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">roslib</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">from</span> <span class="nn">exproblab_assignment_1.srv</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">armor_msgs.srv</span> <span class="kn">import</span> <span class="o">*</span> 
+<span class="kn">from</span> <span class="nn">armor_msgs.msg</span> <span class="kn">import</span> <span class="o">*</span> 
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1">##The oracle know the true hypotesis</span>
+<span class="c1">##Global variables for indentify the true hypotesis</span>
+<span class="c1">## Get the param and  set the global variables</span>
+<span class="n">who</span><span class="o">=</span><span class="kc">None</span>
+<span class="n">where</span><span class="o">=</span><span class="kc">None</span>
+<span class="n">what</span><span class="o">=</span><span class="kc">None</span>
+<span class="c1">#who=rospy.get_param(&quot;/who&quot;)</span>
+<span class="c1">#where=rospy.get_param(&quot;/where&quot;)</span>
+<span class="c1">#what=rospy.get_param(&quot;/what&quot;)</span>
+<span class="c1">#who=str(who)</span>
+<span class="c1">#where=str(where)</span>
+<span class="c1">#what=str(what)</span>
+
+<div class="viewcode-block" id="clbk_convalidation"><a class="viewcode-back" href="../../index.html#scripts.the_oracle.clbk_convalidation">[docs]</a><span class="k">def</span> <span class="nf">clbk_convalidation</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	The function callback of  hypotesis_convalidation custom service</span>
+<span class="sd">	Args:</span>
+<span class="sd">			(ConvalidateHp) req: is the request made by the client composed of</span>
+<span class="sd">			(string) who: is the killer that the robot has acquired</span>
+<span class="sd">			(string) where: is the place that the robot has acquired</span>
+<span class="sd">			(string) what: is the weapon that the robot has acquired</span>
+<span class="sd">	Returns:</span>
+<span class="sd">			(ConvalidateHpResponse) res: the resonse from the server composed by</span>
+<span class="sd">			(bool) who: if the person is correct return True</span>
+<span class="sd">			(bool) where: if the place is correct return True</span>
+<span class="sd">			(bool) what: if the weapon is correct return True</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">global</span> <span class="n">who</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">what</span>
+	<span class="n">res</span><span class="o">=</span><span class="n">ConvalidateHpResponse</span><span class="p">()</span>
+	<span class="c1">##Check all the three fields of the hypotesis</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">who</span><span class="o">==</span><span class="n">who</span><span class="p">):</span>
+		<span class="n">res</span><span class="o">.</span><span class="n">who</span><span class="o">=</span><span class="kc">True</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">res</span><span class="o">.</span><span class="n">who</span><span class="o">=</span><span class="kc">False</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">where</span><span class="o">==</span><span class="n">where</span><span class="p">):</span>
+		<span class="n">res</span><span class="o">.</span><span class="n">where</span><span class="o">=</span><span class="kc">True</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">res</span><span class="o">.</span><span class="n">where</span><span class="o">=</span><span class="kc">False</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">what</span><span class="o">==</span><span class="n">what</span><span class="p">):</span>
+		<span class="n">res</span><span class="o">.</span><span class="n">what</span><span class="o">=</span><span class="kc">True</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">res</span><span class="o">.</span><span class="n">what</span><span class="o">=</span><span class="kc">False</span>
+	<span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="clbk_make_hint"><a class="viewcode-back" href="../../index.html#scripts.the_oracle.clbk_make_hint">[docs]</a><span class="k">def</span>  <span class="nf">clbk_make_hint</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Function callback of make_hint custom service</span>
+<span class="sd">	Args:</span>
+<span class="sd">			(MakeHp) req: the request of client composed by</span>
+<span class="sd">			(string) arg: the type of hints that robot wants to acquire</span>
+<span class="sd">	Returns:</span>
+<span class="sd">			(string) hint: the instance of the argument requested </span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="c1">##fill the armor argument to ask a new instance</span>
+	<span class="n">rospy</span><span class="o">.</span><span class="n">wait_for_service</span><span class="p">(</span><span class="s1">&#39;armor_interface_srv&#39;</span><span class="p">)</span>
+	<span class="n">armor_client</span><span class="o">=</span><span class="n">rospy</span><span class="o">.</span><span class="n">ServiceProxy</span><span class="p">(</span><span class="s1">&#39;armor_interface_srv&#39;</span><span class="p">,</span> <span class="n">ArmorDirective</span><span class="p">)</span>
+	<span class="n">armor_req</span><span class="o">=</span><span class="n">ArmorDirectiveReq</span><span class="p">()</span>
+	<span class="n">armor_req</span><span class="o">.</span><span class="n">client_name</span><span class="o">=</span><span class="s1">&#39;cluedo_fsm&#39;</span>
+	<span class="n">armor_req</span><span class="o">.</span><span class="n">reference_name</span><span class="o">=</span><span class="s1">&#39;cluedo_ontology&#39;</span>
+	<span class="n">armor_req</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;QUERY&#39;</span>
+	<span class="n">armor_req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;IND&#39;</span>
+	<span class="n">armor_req</span><span class="o">.</span><span class="n">secondary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;CLASS&#39;</span>
+	<span class="n">hint</span><span class="o">=</span><span class="n">MakeHpResponse</span><span class="p">()</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">arg</span><span class="o">==</span><span class="s1">&#39;who&#39;</span><span class="p">):</span>
+		<span class="n">armor_req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PERSON&#39;</span><span class="p">]</span>
+		<span class="n">armor_res</span><span class="o">=</span><span class="n">armor_client</span><span class="p">(</span><span class="n">armor_req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">queried_objects</span>
+		<span class="nb">print</span><span class="p">(</span><span class="n">armor_res</span><span class="p">)</span>
+		<span class="n">killer</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">armor_res</span><span class="p">)</span>
+		<span class="n">hint</span><span class="o">.</span><span class="n">hint</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">killer</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">hint</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">arg</span><span class="o">==</span><span class="s1">&#39;where&#39;</span><span class="p">):</span>
+		<span class="n">armor_req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PLACE&#39;</span><span class="p">]</span>
+		<span class="n">armor_res</span><span class="o">=</span><span class="n">armor_client</span><span class="p">(</span><span class="n">armor_req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">queried_objects</span>
+		<span class="n">killer_room</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">armor_res</span><span class="p">)</span>
+		<span class="n">hint</span><span class="o">.</span><span class="n">hint</span><span class="o">=</span><span class="n">killer_room</span>
+		<span class="k">return</span> <span class="n">hint</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">arg</span><span class="o">==</span><span class="s1">&#39;what&#39;</span><span class="p">):</span>
+		<span class="n">armor_req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WEAPON&#39;</span><span class="p">]</span>
+		<span class="n">armor_res</span><span class="o">=</span><span class="n">armor_client</span><span class="p">(</span><span class="n">armor_req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">queried_objects</span>
+		<span class="n">killer_weapon</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">armor_res</span><span class="p">)</span>
+		<span class="n">hint</span><span class="o">.</span><span class="n">hint</span><span class="o">=</span><span class="n">killer_weapon</span>
+		<span class="k">return</span> <span class="n">hint</span></div>
+
+
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../index.html#scripts.the_oracle.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Body of main function</span>
+<span class="sd">	Initialization of check_hypothesis node</span>
+<span class="sd">	Desclaration of hp_convalidation custom service</span>
+<span class="sd">	Args:</span>
+<span class="sd">			(ConvalidateHp) req: is the request made by the client composed of</span>
+<span class="sd">			(string) who: is the killer that the robot has acquired</span>
+<span class="sd">			(string) where: is the place that the robot has acquired</span>
+<span class="sd">			(string) what: is the weapon that the robot has acquired</span>
+<span class="sd">	Returns:</span>
+<span class="sd">			(ConvalidateHpResponse) res: the resonse from the server composed by</span>
+<span class="sd">			(bool) who: if the person is correct return True</span>
+<span class="sd">			(bool) where: if the place is correct return True</span>
+<span class="sd">			(bool) what: if the weapon is correct return True</span>
+<span class="sd">	Desclaration of make_hint custom service</span>
+<span class="sd">	Args:</span>
+<span class="sd">			(MakeHp) req: the request of client composed by</span>
+<span class="sd">			(string) arg: the type of hints that robot wants to acquire</span>
+<span class="sd">	Returns:</span>
+<span class="sd">			(string) hint: the instance of the argument requested </span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;check_hypothesis&#39;</span><span class="p">)</span>
+	<span class="n">convalidate_service</span><span class="o">=</span><span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;hp_convalidation&#39;</span><span class="p">,</span><span class="n">ConvalidateHp</span><span class="p">,</span><span class="n">clbk_convalidation</span><span class="p">)</span>
+	<span class="n">make_service</span><span class="o">=</span><span class="n">rospy</span><span class="o">.</span><span class="n">Service</span><span class="p">(</span><span class="s1">&#39;make_hint&#39;</span><span class="p">,</span><span class="n">MakeHp</span><span class="p">,</span><span class="n">clbk_make_hint</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ready to convalidate a hypotesis&#39;</span><span class="p">)</span>
+	<span class="n">rospy</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span></div>
+	
+	
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span> <span class="p">:</span>
+	<span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Ermanno Girardo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

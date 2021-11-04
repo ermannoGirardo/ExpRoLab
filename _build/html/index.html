@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indices &mdash; exproblab_assignment_1 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> exproblab_assignment_1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Indices</a></li>
+<li><a class="reference internal" href="#experimental-robotics-lab-assignment-documentation">Experimental Robotics Lab Assignment Documentation!</a><ul>
+<li><a class="reference internal" href="#module-scripts.cluedo_fsm">Cluedo FSM Module</a></li>
+<li><a class="reference internal" href="#module-scripts.the_oracle">The Oracle Module</a></li>
+<li><a class="reference internal" href="#module-scripts.load_ontology">Load Ontology Module</a></li>
+<li><a class="reference internal" href="#module-scripts.simulation_time">Simulation Time Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">exproblab_assignment_1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>Indices</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="toctree-wrapper compound">
+</div>
+<div class="section" id="indices">
+<h1>Indices<a class="headerlink" href="#indices" title="Permalink to this headline"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="experimental-robotics-lab-assignment-documentation">
+<h1>Experimental Robotics Lab Assignment Documentation!<a class="headerlink" href="#experimental-robotics-lab-assignment-documentation" title="Permalink to this headline"></a></h1>
+<p>This is the documentation of exproblab_assignment_1 package!</p>
+<div class="section" id="module-scripts.cluedo_fsm">
+<span id="cluedo-fsm-module"></span><h2>Cluedo FSM Module<a class="headerlink" href="#module-scripts.cluedo_fsm" title="Permalink to this headline"></a></h2>
+<span class="target" id="module-cluedo_fsm"></span><dl>
+<dt>Client to: &lt;BR&gt;</dt><dd><p>/armor_interface_srv:  the armor server to manage ontologies</p>
+<p>/hp_convalidation: custom service to tell the hypothesis to the oracle</p>
+<p>/make_hint: custom service to acquire hints once the robot is in a room</p>
+<p>/time_to_move: custom service to generate the time to move to another room</p>
+<p>This node is the implementation of the state machine.
+It is composed by three states:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>-Moving: The robot starting from the Cluedo Room has to move to another room</dt><dd><p>in order to acquire hints.
+This state simulate the motion of the robot, asking to simulation_time server
+to compute the time needed to move from a room to another room.</p>
+</dd>
+<dt>-Acquire Hints: Once the robot is arrived into the room, starts to acquire hints.</dt><dd><p>There is a call to the oracle to making a hint. Via a custom service
+the oracle randomically chooses an instance of type specified by the client
+and return a string of the instace to the client.
+If the hypotesis is completed and not consistent then go to the next state
+on the contrary if it is not return to moving state and  the Robot should
+build a new hypotesis.</p>
+</dd>
+<dt>-Tell Hypotesis: Once an hypotesis is completed and consistent the robot should go to the</dt><dd><p>Cluedo Room and tell the hypotesis to the oracle. The oracle check each field
+of the hypotesis and then says to the robot if the hypothesis is correct or not.
+Internally the oracle says for each of the three fields if it is correct or not.
+In this way, for example, if the robot knows that Mrs Peacock is the killer next
+time that acquire hints avoids to acquire new hints for the killer.
+This is a chooice, in order to do not grow exponencially the number of hypothesis
+before knowing the solution.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.cluedo_fsm.Acquire_Hints">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">scripts.cluedo_fsm.</span></span><span class="sig-name descname"><span class="pre">Acquire_Hints</span></span><a class="reference internal" href="_modules/scripts/cluedo_fsm.html#Acquire_Hints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.cluedo_fsm.Acquire_Hints" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="scripts.cluedo_fsm.Acquire_Hints.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/cluedo_fsm.html#Acquire_Hints.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.cluedo_fsm.Acquire_Hints.execute" title="Permalink to this definition"></a></dt>
+<dd><p>Body of the Acquire_Hints state</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.cluedo_fsm.Motion">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">scripts.cluedo_fsm.</span></span><span class="sig-name descname"><span class="pre">Motion</span></span><a class="reference internal" href="_modules/scripts/cluedo_fsm.html#Motion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.cluedo_fsm.Motion" title="Permalink to this definition"></a></dt>
+<dd><p>Motion state of FSM
+:param smach.State: instance of a smach state</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.cluedo_fsm.Motion.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/cluedo_fsm.html#Motion.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.cluedo_fsm.Motion.execute" title="Permalink to this definition"></a></dt>
+<dd><p>Body of the Motion State
+:param self:
+:param userdata: userdata</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.cluedo_fsm.Tell_Hypothesis">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">scripts.cluedo_fsm.</span></span><span class="sig-name descname"><span class="pre">Tell_Hypothesis</span></span><a class="reference internal" href="_modules/scripts/cluedo_fsm.html#Tell_Hypothesis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.cluedo_fsm.Tell_Hypothesis" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="scripts.cluedo_fsm.Tell_Hypothesis.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/cluedo_fsm.html#Tell_Hypothesis.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.cluedo_fsm.Tell_Hypothesis.execute" title="Permalink to this definition"></a></dt>
+<dd><p>Body of the Tell_Hypothesis state</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.cluedo_fsm.cut_string">
+<span class="sig-prename descclassname"><span class="pre">scripts.cluedo_fsm.</span></span><span class="sig-name descname"><span class="pre">cut_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/cluedo_fsm.html#cut_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.cluedo_fsm.cut_string" title="Permalink to this definition"></a></dt>
+<dd><p>Simple function to cut the armor response string
+:param string: string to cut</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>string cutted</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.cluedo_fsm.main">
+<span class="sig-prename descclassname"><span class="pre">scripts.cluedo_fsm.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/cluedo_fsm.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.cluedo_fsm.main" title="Permalink to this definition"></a></dt>
+<dd><p>Body of the main function
+Initialize the node as cluedo_FSM
+Create a client of the armor server to deal with armor
+Create a client of the hp_convalidation server to says the hypothesis to the oracle
+Create a client of the make_hint server to acquire hints
+Create a client of the time_to_move server to calculate the time needed to change room
+Create the SMACH state machine and define the outcomes of FSM as CASE_SOLVED</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.the_oracle">
+<span id="the-oracle-module"></span><h2>The Oracle Module<a class="headerlink" href="#module-scripts.the_oracle" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.the_oracle.clbk_convalidation">
+<span class="sig-prename descclassname"><span class="pre">scripts.the_oracle.</span></span><span class="sig-name descname"><span class="pre">clbk_convalidation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/the_oracle.html#clbk_convalidation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.the_oracle.clbk_convalidation" title="Permalink to this definition"></a></dt>
+<dd><p>The function callback of  hypotesis_convalidation custom service
+:param (ConvalidateHp) req: is the request made by the client composed of
+:param (string) who: is the killer that the robot has acquired
+:param (string) where: is the place that the robot has acquired
+:param (string) what: is the weapon that the robot has acquired</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the resonse from the server composed by
+(bool) who: if the person is correct return True
+(bool) where: if the place is correct return True
+(bool) what: if the weapon is correct return True</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(ConvalidateHpResponse) res</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.the_oracle.clbk_make_hint">
+<span class="sig-prename descclassname"><span class="pre">scripts.the_oracle.</span></span><span class="sig-name descname"><span class="pre">clbk_make_hint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/the_oracle.html#clbk_make_hint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.the_oracle.clbk_make_hint" title="Permalink to this definition"></a></dt>
+<dd><p>Function callback of make_hint custom service
+:param (MakeHp) req: the request of client composed by
+:param (string) arg: the type of hints that robot wants to acquire</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the instance of the argument requested</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(string) hint</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.the_oracle.main">
+<span class="sig-prename descclassname"><span class="pre">scripts.the_oracle.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/the_oracle.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.the_oracle.main" title="Permalink to this definition"></a></dt>
+<dd><p>Body of main function
+Initialization of check_hypothesis node
+Desclaration of hp_convalidation custom service
+:param (ConvalidateHp) req: is the request made by the client composed of
+:param (string) who: is the killer that the robot has acquired
+:param (string) where: is the place that the robot has acquired
+:param (string) what: is the weapon that the robot has acquired</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the resonse from the server composed by
+(bool) who: if the person is correct return True
+(bool) where: if the place is correct return True
+(bool) what: if the weapon is correct return True</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(ConvalidateHpResponse) res</p>
+</dd>
+</dl>
+<p>Desclaration of make_hint custom service
+:param (MakeHp) req: the request of client composed by
+:param (string) arg: the type of hints that robot wants to acquire</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the instance of the argument requested</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(string) hint</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.load_ontology">
+<span id="load-ontology-module"></span><h2>Load Ontology Module<a class="headerlink" href="#module-scripts.load_ontology" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.load_ontology.load_ontology">
+<span class="sig-prename descclassname"><span class="pre">scripts.load_ontology.</span></span><span class="sig-name descname"><span class="pre">load_ontology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_command_spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondary_command_spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/load_ontology.html#load_ontology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.load_ontology.load_ontology" title="Permalink to this definition"></a></dt>
+<dd><p>Function used to load the ontology on the armor server
+Instanciate a client of the armor server
+:param command: is the command to pass at armor to load the ontology
+:param primary_command_spec: is the primary command to pass at armor to load the ontology
+:param secondary_command_spec: is the secondary command to pass at armor to load the ontology
+:param args: is an array of arguments to pass at armor to load the ontology</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the armor service response</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>res</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.load_ontology.main">
+<span class="sig-prename descclassname"><span class="pre">scripts.load_ontology.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/load_ontology.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.load_ontology.main" title="Permalink to this definition"></a></dt>
+<dd><p>The body of the main function
+Initialize the node as armor_interface
+Pass all the arguments to the load_ontology function</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.simulation_time">
+<span id="simulation-time-module"></span><h2>Simulation Time Module<a class="headerlink" href="#module-scripts.simulation_time" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.simulation_time.clbk_time_simulated">
+<span class="sig-prename descclassname"><span class="pre">scripts.simulation_time.</span></span><span class="sig-name descname"><span class="pre">clbk_time_simulated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/simulation_time.html#clbk_time_simulated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.simulation_time.clbk_time_simulated" title="Permalink to this definition"></a></dt>
+<dd><p>The function callback of time_to_move custom service
+:param (TimeToWait) req: is the client request for computing the time composed by
+:param (string) from_room: the room where the robot is
+:param (string) to_room: the room where the robot wants to go</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the time needed to arrive in to_room</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(float32) time</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.simulation_time.main">
+<span class="sig-prename descclassname"><span class="pre">scripts.simulation_time.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/simulation_time.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.simulation_time.main" title="Permalink to this definition"></a></dt>
+<dd><p>Main funtion of the time_for_simulation node
+Initialize the node
+Declare a service time_to_move of type TimeToWait (custom service)
+:param (string) from_room: the room where the robot is
+:param (string) to_room: the room where the robot wants to go</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>is the time needed to arrive in to_room (assuming an average velocity of 1m/s)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(float32) time</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Ermanno Girardo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

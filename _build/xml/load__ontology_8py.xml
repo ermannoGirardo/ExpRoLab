@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="load__ontology_8py" kind="file" language="Python">
+    <compoundname>load_ontology.py</compoundname>
+    <innernamespace refid="namespaceload__ontology">load_ontology</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">#!/usr/bin/env<sp/>python</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="keyword">import</highlight><highlight class="normal"><sp/>rospy</highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="keyword">from</highlight><highlight class="normal"><sp/><ref refid="namespacearmor__msgs_1_1srv" kindref="compound">armor_msgs.srv</ref><sp/></highlight><highlight class="keyword">import</highlight><highlight class="normal"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">from</highlight><highlight class="normal"><sp/><ref refid="namespacearmor__msgs_1_1msg" kindref="compound">armor_msgs.msg</ref><sp/></highlight><highlight class="keyword">import</highlight><highlight class="normal"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keyword">import</highlight><highlight class="normal"><sp/>sys</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal">path=</highlight><highlight class="keywordtype">None</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="comment">#path=rospy.get_param(&quot;/path_to_load&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="comment">#path=str(path)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keyword">def<sp/></highlight><highlight class="normal"><ref refid="namespaceload__ontology" kindref="compound">load_ontology</ref>(command,primary_command_spec,secondary_command_spec,args):</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;&quot;&quot;</highlight></codeline>
+<codeline lineno="15"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>Function<sp/>used<sp/>to<sp/>load<sp/>the<sp/>ontology<sp/>on<sp/>the<sp/>armor<sp/>server</highlight></codeline>
+<codeline lineno="16"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>Instanciate<sp/>a<sp/>client<sp/>of<sp/>the<sp/>armor<sp/>server</highlight></codeline>
+<codeline lineno="17"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>Args:</highlight></codeline>
+<codeline lineno="18"><highlight class="stringliteral"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>command:<sp/>is<sp/>the<sp/>command<sp/>to<sp/>pass<sp/>at<sp/>armor<sp/>to<sp/>load<sp/>the<sp/>ontology</highlight></codeline>
+<codeline lineno="19"><highlight class="stringliteral"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>primary_command_spec:<sp/>is<sp/>the<sp/>primary<sp/>command<sp/>to<sp/>pass<sp/>at<sp/>armor<sp/>to<sp/>load<sp/>the<sp/>ontology</highlight></codeline>
+<codeline lineno="20"><highlight class="stringliteral"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>secondary_command_spec:<sp/>is<sp/>the<sp/>secondary<sp/>command<sp/>to<sp/>pass<sp/>at<sp/>armor<sp/>to<sp/>load<sp/>the<sp/>ontology</highlight></codeline>
+<codeline lineno="21"><highlight class="stringliteral"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>args:<sp/>is<sp/>an<sp/>array<sp/>of<sp/>arguments<sp/>to<sp/>pass<sp/>at<sp/>armor<sp/>to<sp/>load<sp/>the<sp/>ontology</highlight></codeline>
+<codeline lineno="22"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>Returns:</highlight></codeline>
+<codeline lineno="23"><highlight class="stringliteral"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>res:<sp/>the<sp/>armor<sp/>service<sp/>response</highlight></codeline>
+<codeline lineno="24"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>&quot;&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>rospy.wait_for_service(</highlight><highlight class="stringliteral">&apos;armor_interface_srv&apos;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>armor_client=rospy.ServiceProxy(</highlight><highlight class="stringliteral">&apos;armor_interface_srv&apos;</highlight><highlight class="normal">,<sp/>ArmorDirective)</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>req=ArmorDirectiveReq()</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>req.client_name=</highlight><highlight class="stringliteral">&apos;cluedo_fsm&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>req.reference_name=</highlight><highlight class="stringliteral">&apos;cluedo_ontology&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>req.command=command</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>req.primary_command_spec<sp/>=<sp/>primary_command_spec</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>req.secondary_command_spec=secondary_command_spec</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>req.args=args</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>res=<ref refid="namespacecluedo__fsm_1a253b88c0ef6cf0ccba8f33bf58b8cecb" kindref="member">armor_client</ref>(req)</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>res</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="keyword">def<sp/></highlight><highlight class="normal"><ref refid="namespacecluedo__fsm_1a750668964c31557290ac9db1e21125ff" kindref="member">main</ref>():</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;&quot;&quot;</highlight></codeline>
+<codeline lineno="41"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>The<sp/>body<sp/>of<sp/>the<sp/>main<sp/>function</highlight></codeline>
+<codeline lineno="42"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>Initialize<sp/>the<sp/>node<sp/>as<sp/>armor_interface</highlight></codeline>
+<codeline lineno="43"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>Pass<sp/>all<sp/>the<sp/>arguments<sp/>to<sp/>the<sp/>load_ontology<sp/>function</highlight></codeline>
+<codeline lineno="44"><highlight class="stringliteral"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="45"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>&quot;&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>rospy.init_node(</highlight><highlight class="stringliteral">&apos;armor_interface&apos;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>response=<ref refid="namespaceload__ontology" kindref="compound">load_ontology</ref>(</highlight><highlight class="stringliteral">&apos;LOAD&apos;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&apos;FILE&apos;</highlight><highlight class="normal"><sp/>,<sp/></highlight><highlight class="stringliteral">&apos;&apos;</highlight><highlight class="normal"><sp/>,<sp/>[path,</highlight><highlight class="stringliteral">&apos;http://www.emarolab.it/cluedo-ontology&apos;</highlight><highlight class="normal">,</highlight><highlight class="stringliteral">&apos;true&apos;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&apos;PELLET&apos;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&apos;true&apos;</highlight><highlight class="normal">])</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>if(response.armor_response.success==</highlight><highlight class="keyword">False</highlight><highlight class="normal">):</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>print(</highlight><highlight class="stringliteral">&apos;Error:<sp/>cannot<sp/>load<sp/>the<sp/>ontology&apos;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sys.exit()</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>elif(response.armor_response.success==</highlight><highlight class="keyword">True</highlight><highlight class="normal">):</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>print(</highlight><highlight class="stringliteral">&apos;The<sp/>ontology<sp/>is<sp/>correctly<sp/>loaded&apos;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>rospy.spin()</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>sys.exit()</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>__name__<sp/>==<sp/></highlight><highlight class="stringliteral">&apos;__main__&apos;</highlight><highlight class="normal"><sp/>:</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecluedo__fsm_1a750668964c31557290ac9db1e21125ff" kindref="member">main</ref>()</highlight></codeline>
+    </programlisting>
+    <location file="scripts/load_ontology.py"/>
+  </compounddef>
+</doxygen>

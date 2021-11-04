@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classcluedo__fsm_1_1_motion" kind="class" language="Python" prot="public">
+    <compoundname>cluedo_fsm::Motion</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">State</basecompoundref>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcluedo__fsm_1_1_motion_1afed389bf90deb99b83f4ca9ea986f9d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def cluedo_fsm.Motion.__init__</definition>
+        <argsstring>(self)</argsstring>
+        <name>__init__</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim> initialisation function of the state Motion, it should not wait
+ Outcomes:
+            enter_room: room that the robot should reach to acquire hints
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="111" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="111" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="function" id="classcluedo__fsm_1_1_motion_1a17ea6e720aa917faaea7d50944926436" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def cluedo_fsm.Motion.execute</definition>
+        <argsstring>(self, userdata)</argsstring>
+        <name>execute</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>userdata</type>
+          <defname>userdata</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Body of the Motion State
+Args:
+self
+userdata: userdata
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="120" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="120" bodyend="166"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><verbatim>Motion state of FSM
+Args:
+        smach.State: instance of a smach state
+</verbatim> </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>cluedo_fsm.Motion</label>
+        <link refid="classcluedo__fsm_1_1_motion"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>State</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>cluedo_fsm.Motion</label>
+        <link refid="classcluedo__fsm_1_1_motion"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>State</label>
+      </node>
+    </collaborationgraph>
+    <location file="scripts/cluedo_fsm.py" line="105" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="105" bodyend="167"/>
+    <listofallmembers>
+      <member refid="classcluedo__fsm_1_1_motion_1afed389bf90deb99b83f4ca9ea986f9d5" prot="public" virt="non-virtual"><scope>cluedo_fsm::Motion</scope><name>__init__</name></member>
+      <member refid="classcluedo__fsm_1_1_motion_1a17ea6e720aa917faaea7d50944926436" prot="public" virt="non-virtual"><scope>cluedo_fsm::Motion</scope><name>execute</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- Launch the armor server -->
+	<node pkg="armor" type="execute" name="armor_service" args="it.emarolab.armor.ARMORMainService"/>
+	
+	<!-- Parameters for the real hypothesis -->
+	<param name="who" type="string" value="Mrs_Peacock" />
+	<param name="where" type="string" value="Biliard_Room" />
+	<param name="what" type="string" value="Spanner" />
+	
+	<!-- Parameters for the paths -->
+	<param name="path_to_save" type="string" value="/root/ros_ws/src/exproblab_assignment_1/correct_hypotesis.owl" />
+	<param name="path_to_load" type="string" value="/root/ros_ws/src/exproblab_assignment_1/cluedo_ontology.owl" />
+	
+	<!-- Launch generate_time node -->
+	<node name="generate_time" pkg="exproblab_assignment_1" type ="simulation_time.py" />
+	
+	<!-- Launch oracle node -->
+	<node name="the_oracle" pkg="exproblab_assignment_1" type ="the_oracle.py" />
+	
+	<!-- Launch the node to visualize the smach_viewer FSM -->
+	<node name="view_fsm" pkg="smach_viewer" type ="smach_viewer.py" />
+	
+	<!-- Launch the node for load the ontology into armor server -->
+	<node name="load_ontology" pkg="exproblab_assignment_1" type ="load_ontology.py" />
+
+	
+</launch>

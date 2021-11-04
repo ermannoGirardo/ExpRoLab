@@ -1,0 +1,87 @@
+\hypertarget{namespacesimulation__time}{}\doxysection{simulation\+\_\+time Namespace Reference}
+\label{namespacesimulation__time}\index{simulation\_time@{simulation\_time}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacesimulation__time_ad66c0a8961884cd6fd740d9fdd396fa8}{clbk\+\_\+time\+\_\+simulated}} (req)
+\item 
+def \mbox{\hyperlink{namespacesimulation__time_a082496257f66cb251aff732664d79c7f}{main}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+dictionary \mbox{\hyperlink{namespacesimulation__time_a64dee7d312bd82ef016ec60028ca6959}{rooms}}
+\begin{DoxyCompactList}\small\item\em dictionary of the rooms \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacesimulation__time_aeb8d5747c8e91fdac2b1497581980bb7}{avg\+\_\+speed}} = 1
+\begin{DoxyCompactList}\small\item\em assume robot\textquotesingle{}s average velocity in m/s \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacesimulation__time_ad66c0a8961884cd6fd740d9fdd396fa8}\label{namespacesimulation__time_ad66c0a8961884cd6fd740d9fdd396fa8}} 
+\index{simulation\_time@{simulation\_time}!clbk\_time\_simulated@{clbk\_time\_simulated}}
+\index{clbk\_time\_simulated@{clbk\_time\_simulated}!simulation\_time@{simulation\_time}}
+\doxysubsubsection{\texorpdfstring{clbk\_time\_simulated()}{clbk\_time\_simulated()}}
+{\footnotesize\ttfamily def simulation\+\_\+time.\+clbk\+\_\+time\+\_\+simulated (\begin{DoxyParamCaption}\item[{}]{req }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}The function callback of time_to_move custom service
+Args:
+        (TimeToWait) req: is the client request for computing the time composed by
+        (string) from_room: the room where the robot is
+        (string) to_room: the room where the robot wants to go
+Returns:
+        (float32) time: the time needed to arrive in to_room
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacesimulation__time_a082496257f66cb251aff732664d79c7f}\label{namespacesimulation__time_a082496257f66cb251aff732664d79c7f}} 
+\index{simulation\_time@{simulation\_time}!main@{main}}
+\index{main@{main}!simulation\_time@{simulation\_time}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily def simulation\+\_\+time.\+main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Main funtion of the time_for_simulation node
+Initialize the node
+Declare a service time_to_move of type TimeToWait (custom service)
+Args:
+        (string) from_room: the room where the robot is
+        (string) to_room: the room where the robot wants to go
+Returns:
+        (float32) time: is the time needed to arrive in to_room (assuming an average velocity of 1m/s)
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacesimulation__time_aeb8d5747c8e91fdac2b1497581980bb7}\label{namespacesimulation__time_aeb8d5747c8e91fdac2b1497581980bb7}} 
+\index{simulation\_time@{simulation\_time}!avg\_speed@{avg\_speed}}
+\index{avg\_speed@{avg\_speed}!simulation\_time@{simulation\_time}}
+\doxysubsubsection{\texorpdfstring{avg\_speed}{avg\_speed}}
+{\footnotesize\ttfamily int simulation\+\_\+time.\+avg\+\_\+speed = 1}
+
+
+
+assume robot\textquotesingle{}s average velocity in m/s 
+
+\mbox{\Hypertarget{namespacesimulation__time_a64dee7d312bd82ef016ec60028ca6959}\label{namespacesimulation__time_a64dee7d312bd82ef016ec60028ca6959}} 
+\index{simulation\_time@{simulation\_time}!rooms@{rooms}}
+\index{rooms@{rooms}!simulation\_time@{simulation\_time}}
+\doxysubsubsection{\texorpdfstring{rooms}{rooms}}
+{\footnotesize\ttfamily dictionary simulation\+\_\+time.\+rooms}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  \{}
+\DoxyCodeLine{2                 \textcolor{stringliteral}{'Cluedo\_Room'} : [0,0] , }
+\DoxyCodeLine{3                 \textcolor{stringliteral}{'Hall'} : [0,-\/3] , }
+\DoxyCodeLine{4                 \textcolor{stringliteral}{'Study'} : [3,-\/3] , }
+\DoxyCodeLine{5                 \textcolor{stringliteral}{'Library'} : [3,-\/1] , }
+\DoxyCodeLine{6                 \textcolor{stringliteral}{'Biliard\_Room'} : [3,1] , }
+\DoxyCodeLine{7                 \textcolor{stringliteral}{'Conservatory'} : [3,3] , }
+\DoxyCodeLine{8                 \textcolor{stringliteral}{'Ballroom'} : [0,3] ,}
+\DoxyCodeLine{9                 \textcolor{stringliteral}{'Kitchen'} : [-\/3,3] ,}
+\DoxyCodeLine{10                 \textcolor{stringliteral}{'Dining\_Room'} : [-\/3,0] ,}
+\DoxyCodeLine{11                 \textcolor{stringliteral}{'Lounge'} : [-\/3,-\/3]}
+\DoxyCodeLine{12                 \}}
+
+\end{DoxyCode}
+
+
+dictionary of the rooms 
+

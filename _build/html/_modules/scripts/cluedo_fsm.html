@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.cluedo_fsm &mdash; exproblab_assignment_1 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> exproblab_assignment_1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">exproblab_assignment_1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.cluedo_fsm</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.cluedo_fsm</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: cluedo_fsm</span>
+<span class="sd">   :platform: Unix</span>
+<span class="sd">   :synopsis: Implementation of a FSM for playing cluedo game</span>
+<span class="sd">.. moduleauthor:: Ermanno Girardo  &lt;s4506472@studenti.unige.it&gt;</span>
+<span class="sd">Client to: &lt;BR&gt;</span>
+<span class="sd">     /armor_interface_srv:  the armor server to manage ontologies</span>
+<span class="sd">     </span>
+<span class="sd">     /hp_convalidation: custom service to tell the hypothesis to the oracle</span>
+<span class="sd">     </span>
+<span class="sd">     /make_hint: custom service to acquire hints once the robot is in a room</span>
+<span class="sd">     </span>
+<span class="sd">     /time_to_move: custom service to generate the time to move to another room</span>
+<span class="sd">     </span>
+<span class="sd">     </span>
+<span class="sd">     This node is the implementation of the state machine.</span>
+<span class="sd">     It is composed by three states:</span>
+<span class="sd">		-Moving: The robot starting from the Cluedo Room has to move to another room</span>
+<span class="sd">						in order to acquire hints.</span>
+<span class="sd">						This state simulate the motion of the robot, asking to simulation_time server </span>
+<span class="sd">						to compute the time needed to move from a room to another room.</span>
+<span class="sd">		-Acquire Hints: Once the robot is arrived into the room, starts to acquire hints.</span>
+<span class="sd">									There is a call to the oracle to making a hint. Via a custom service</span>
+<span class="sd">									the oracle randomically chooses an instance of type specified by the client</span>
+<span class="sd">									and return a string of the instace to the client.</span>
+<span class="sd">									If the hypotesis is completed and not consistent then go to the next state </span>
+<span class="sd">									on the contrary if it is not return to moving state and  the Robot should </span>
+<span class="sd">									build a new hypotesis.</span>
+<span class="sd">		-Tell Hypotesis: Once an hypotesis is completed and consistent the robot should go to the</span>
+<span class="sd">									Cluedo Room and tell the hypotesis to the oracle. The oracle check each field </span>
+<span class="sd">									of the hypotesis and then says to the robot if the hypothesis is correct or not.</span>
+<span class="sd">									Internally the oracle says for each of the three fields if it is correct or not.</span>
+<span class="sd">									In this way, for example, if the robot knows that Mrs Peacock is the killer next </span>
+<span class="sd">									time that acquire hints avoids to acquire new hints for the killer.</span>
+<span class="sd">									This is a chooice, in order to do not grow exponencially the number of hypothesis</span>
+<span class="sd">									before knowing the solution.</span>
+<span class="sd">  </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">roslib</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">smach</span>
+<span class="kn">import</span> <span class="nn">smach_ros</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">armor_msgs.srv</span> <span class="kn">import</span> <span class="o">*</span> 
+<span class="kn">from</span> <span class="nn">armor_msgs.msg</span> <span class="kn">import</span> <span class="o">*</span> 
+<span class="kn">from</span> <span class="nn">exproblab_assignment_1.srv</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="c1">##Global Variables</span>
+
+<span class="c1">##Define the armor server</span>
+<span class="n">armor_client</span><span class="o">=</span><span class="kc">None</span>
+<span class="n">req</span> <span class="o">=</span> <span class="n">ArmorDirectiveReq</span><span class="p">()</span>
+<span class="n">req</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s1">&#39;cluedo_fsm&#39;</span>
+<span class="n">req</span><span class="o">.</span><span class="n">reference_name</span> <span class="o">=</span> <span class="s1">&#39;cluedo_ontology&#39;</span>
+
+<span class="c1">##time to detect hints in seconds</span>
+<span class="n">time_to_detect</span><span class="o">=</span><span class="mi">3</span>
+
+<span class="c1">##boolean values for the hints</span>
+<span class="n">true_who</span><span class="o">=</span><span class="kc">False</span>
+<span class="n">true_where</span><span class="o">=</span><span class="kc">False</span>
+<span class="n">true_what</span><span class="o">=</span><span class="kc">False</span>
+
+<span class="c1">##hypothesis counter</span>
+<span class="n">HP_counter</span><span class="o">=</span><span class="mi">0</span>
+
+<span class="c1">##path to save the onrology</span>
+<span class="n">path</span><span class="o">=</span><span class="kc">None</span>
+<span class="c1">#path=rospy.get_param(&quot;/path_to_save&quot;)</span>
+<span class="c1">#path=str(path)</span>
+
+<span class="c1">##variables to compute time to change room</span>
+<span class="c1">##Suppose the robot starts in the cluedo room</span>
+<span class="n">from_room</span><span class="o">=</span><span class="s1">&#39;Cluedo_Room&#39;</span>
+<span class="n">to_room</span><span class="o">=</span><span class="kc">None</span>
+
+<span class="c1">##boolean for completed hypothesis</span>
+<span class="n">completed_hp</span><span class="o">=</span><span class="kc">False</span>
+
+<span class="c1">##varialable to generate a inconsistent hypotesis</span>
+<span class="n">inconsistent_count</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">inconsistent_list</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+
+<div class="viewcode-block" id="cut_string"><a class="viewcode-back" href="../../index.html#scripts.cluedo_fsm.cut_string">[docs]</a><span class="k">def</span> <span class="nf">cut_string</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Simple function to cut the armor response string</span>
+<span class="sd">	Args:</span>
+<span class="sd">			string:string to cut</span>
+<span class="sd">	Returns:</span>
+<span class="sd">			string:string cutted</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">start</span><span class="o">=</span><span class="n">string</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+	<span class="n">end</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+	<span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">[(</span><span class="n">start</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="n">end</span><span class="p">]</span>
+	<span class="k">return</span> <span class="n">string</span></div>
+
+
+
+<span class="c1"># define state exploration</span>
+<div class="viewcode-block" id="Motion"><a class="viewcode-back" href="../../index.html#scripts.cluedo_fsm.Motion">[docs]</a><span class="k">class</span> <span class="nc">Motion</span><span class="p">(</span><span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Motion state of FSM</span>
+<span class="sd">	Args:</span>
+<span class="sd">			smach.State: instance of a smach state</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		 initialisation function of the state Motion, it should not wait</span>
+<span class="sd">		 Outcomes:</span>
+<span class="sd">							enter_room: room that the robot should reach to acquire hints</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+								<span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;enter_room&#39;</span><span class="p">])</span>
+        
+<div class="viewcode-block" id="Motion.execute"><a class="viewcode-back" href="../../index.html#scripts.cluedo_fsm.Motion.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userdata</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Body of the Motion State</span>
+<span class="sd">		Args:</span>
+<span class="sd">				self</span>
+<span class="sd">				userdata: userdata</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">global</span> <span class="n">armor_client</span><span class="p">,</span><span class="n">from_room</span><span class="p">,</span><span class="n">to_room</span><span class="p">,</span><span class="n">time_to_explore</span><span class="p">,</span><span class="n">req</span>
+		<span class="c1">##choose randomly next room  </span>
+		<span class="n">req</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;QUERY&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;IND&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">secondary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;CLASS&#39;</span> 
+		<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PLACE&#39;</span><span class="p">]</span>
+		<span class="c1">##res is the list of all PLACES into the ontology</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">queried_objects</span>
+		<span class="c1">##choose randomly an instance in the list</span>
+		<span class="n">room</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+		<span class="n">room</span><span class="o">=</span><span class="n">cut_string</span><span class="p">(</span><span class="n">room</span><span class="p">)</span> 
+		<span class="c1">##if the room is Cluedo Room</span>
+		<span class="c1">##choice another room</span>
+		<span class="k">while</span><span class="p">(</span><span class="n">room</span><span class="o">==</span><span class="s1">&#39;Cluedo_Room&#39;</span><span class="p">):</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cannot go to Cluedo Room to search hints&#39;</span><span class="p">)</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;QUERY&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;IND&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">secondary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;CLASS&#39;</span> 
+			<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PLACE&#39;</span><span class="p">]</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">queried_objects</span>
+			<span class="n">room</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+			<span class="n">room</span><span class="o">=</span><span class="n">cut_string</span><span class="p">(</span><span class="n">room</span><span class="p">)</span> 
+		<span class="c1">##Go to room</span>
+		<span class="n">to_room</span><span class="o">=</span><span class="n">room</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;From : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">from_room</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;  Move to:  &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">to_room</span><span class="p">))</span>
+		<span class="c1">##Call the custom service to compute the time</span>
+		<span class="n">time_response</span><span class="o">=</span><span class="n">time_to_explore</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">from_room</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">to_room</span><span class="p">))</span><span class="o">.</span><span class="n">time</span>
+		<span class="c1">#Exploration</span>
+		<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s1">&#39;Exploring&#39;</span><span class="p">)</span>
+		<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">time_response</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;I am arrived in: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">to_room</span><span class="p">))</span>
+		<span class="c1">##update prev_room</span>
+		<span class="n">from_room</span><span class="o">=</span><span class="n">to_room</span>
+		<span class="k">return</span> <span class="s1">&#39;enter_room&#39;</span></div></div>
+        
+        
+    
+    
+    
+<span class="c1"># define state make hypotesis</span>
+<div class="viewcode-block" id="Acquire_Hints"><a class="viewcode-back" href="../../index.html#scripts.cluedo_fsm.Acquire_Hints">[docs]</a><span class="k">class</span> <span class="nc">Acquire_Hints</span><span class="p">(</span><span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Initialization of Acquire_Hints state</span>
+<span class="sd">		Args:</span>
+<span class="sd">				outcomes:</span>
+<span class="sd">								enter_cluedo_room: once an hypotesis is completed and consistent</span>
+<span class="sd">								inconsistent_hypotesis: when an hypothesis is inconsistent go to Motion state</span>
+<span class="sd">								incompleted_hypothesis:when an hypothesis is incompleted go to Motion state</span>
+<span class="sd">				input_keys:</span>
+<span class="sd">								killer: the acquired  murder </span>
+<span class="sd">								killer_weapon: the acquired killer weapon</span>
+<span class="sd">								killer_place: the acquired killer place</span>
+<span class="sd">				output_keys:</span>
+<span class="sd">								killer: the acquired  murder </span>
+<span class="sd">								killer_weapon: the acquired killer weapon</span>
+<span class="sd">								killer_place: the acquired killer place</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># initialisation function, it should not wait</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+								<span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;enter_cluedo_room&#39;</span><span class="p">,</span><span class="s1">&#39;inconsistent_hypothesis&#39;</span><span class="p">,</span><span class="s1">&#39;incompleted_hypothesis&#39;</span><span class="p">],</span>
+								<span class="n">input_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;killer&#39;</span><span class="p">,</span><span class="s1">&#39;killer_weapon&#39;</span><span class="p">,</span><span class="s1">&#39;killer_place&#39;</span><span class="p">],</span>
+								<span class="n">output_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;killer&#39;</span><span class="p">,</span><span class="s1">&#39;killer_weapon&#39;</span><span class="p">,</span><span class="s1">&#39;killer_place&#39;</span><span class="p">])</span>
+        
+<div class="viewcode-block" id="Acquire_Hints.execute"><a class="viewcode-back" href="../../index.html#scripts.cluedo_fsm.Acquire_Hints.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userdata</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Body of the Acquire_Hints state</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">global</span> <span class="n">armor_client</span><span class="p">,</span><span class="n">make_hint_client</span><span class="p">,</span><span class="n">HP_counter</span><span class="p">,</span><span class="n">completed_hp</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Search for hints</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="c1">##simulate time for searching a hint</span>
+		<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">time_to_detect</span><span class="p">)</span>
+		<span class="c1">##if is not correct the who hint QUERY a new WHO</span>
+		<span class="k">global</span> <span class="n">true_who</span><span class="p">,</span><span class="n">true_where</span><span class="p">,</span><span class="n">true_what</span><span class="p">,</span><span class="n">inconsistent_count</span><span class="p">,</span><span class="n">inconsistent_list</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">true_who</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+			<span class="n">killer</span><span class="o">=</span><span class="n">make_hint_client</span><span class="p">(</span><span class="s1">&#39;who&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hint</span>
+			<span class="n">killer</span><span class="o">=</span><span class="n">cut_string</span><span class="p">(</span><span class="n">killer</span><span class="p">)</span>
+			<span class="n">userdata</span><span class="o">.</span><span class="n">killer</span><span class="o">=</span><span class="n">killer</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Detect a hint: the killer is: &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer</span><span class="p">))</span>
+		<span class="c1">##if is not correct the where hint QUERY a new PLACE</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">true_where</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+			<span class="n">killer_place</span><span class="o">=</span><span class="n">make_hint_client</span><span class="p">(</span><span class="s1">&#39;where&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hint</span>
+			<span class="n">killer_place</span><span class="o">=</span><span class="n">cut_string</span><span class="p">(</span><span class="n">killer_place</span><span class="p">)</span>
+			<span class="c1">##hint could not be cluedo room</span>
+			<span class="k">while</span><span class="p">(</span><span class="n">killer_place</span><span class="o">==</span><span class="s1">&#39;Cluedo_Room&#39;</span><span class="p">):</span>
+				<span class="n">killer_place</span><span class="o">=</span><span class="n">make_hint_client</span><span class="p">(</span><span class="s1">&#39;where&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hint</span>
+				<span class="n">killer_place</span><span class="o">=</span><span class="n">cut_string</span><span class="p">(</span><span class="n">killer_place</span><span class="p">)</span>
+			<span class="n">userdata</span><span class="o">.</span><span class="n">killer_place</span><span class="o">=</span><span class="n">killer_place</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Detect a hint: the place is: &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer_place</span><span class="p">))</span>
+		<span class="c1">##if is not correct the what hint QUERY a new WHO</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">true_what</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+			<span class="n">killer_weapon</span><span class="o">=</span><span class="n">make_hint_client</span><span class="p">(</span><span class="s1">&#39;what&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hint</span>
+			<span class="n">killer_weapon</span><span class="o">=</span><span class="n">cut_string</span><span class="p">(</span><span class="n">killer_weapon</span><span class="p">)</span>
+			<span class="n">userdata</span><span class="o">.</span><span class="n">killer_weapon</span><span class="o">=</span><span class="n">killer_weapon</span>	
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Detect a hint: the weapon is: &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer_weapon</span><span class="p">))</span>
+		<span class="c1">##ADD hypotesis</span>
+		<span class="n">hypothesis</span><span class="o">=</span><span class="s1">&#39;HP&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">HP_counter</span><span class="p">)</span>
+		<span class="n">HP_counter</span><span class="o">=</span><span class="n">HP_counter</span><span class="o">+</span><span class="mi">1</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;ADD&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;IND&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">secondary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;CLASS&#39;</span> 
+		<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">hypothesis</span><span class="p">,</span><span class="s1">&#39;HYPOTHESIS&#39;</span><span class="p">]</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">success</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">res</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error to add the hypotesis</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="c1">##ADD instances to the hypotesis</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;ADD&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;OBJECTPROP&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">secondary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;IND&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;who&#39;</span><span class="p">,</span><span class="n">hypothesis</span><span class="p">,</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer</span><span class="p">]</span>
+		<span class="n">res</span><span class="o">=</span><span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">success</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">res</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error to add the killer to: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hypothesis</span><span class="p">))</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;what&#39;</span><span class="p">,</span><span class="n">hypothesis</span><span class="p">,</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer_weapon</span><span class="p">]</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">success</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">res</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error to add the weapon to: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hypothesis</span><span class="p">))</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;where&#39;</span><span class="p">,</span><span class="n">hypothesis</span><span class="p">,</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer_place</span><span class="p">]</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">success</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">res</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error to add the place to: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hypothesis</span><span class="p">))</span>
+		<span class="c1">##Every 3 completed hypotesis generate the inconsistent hypotesis</span>
+		<span class="c1">##And if the killer is not known yet</span>
+		<span class="k">if</span><span class="p">((</span><span class="n">inconsistent_count</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="ow">and</span><span class="p">(</span><span class="n">true_who</span><span class="o">==</span><span class="kc">False</span><span class="p">)):</span>
+			<span class="n">killer</span><span class="o">=</span><span class="n">make_hint_client</span><span class="p">(</span><span class="s1">&#39;who&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hint</span>
+			<span class="n">killer</span><span class="o">=</span><span class="n">cut_string</span><span class="p">(</span><span class="n">killer</span><span class="p">)</span>
+			<span class="n">userdata</span><span class="o">.</span><span class="n">killer</span><span class="o">=</span><span class="n">killer</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Detect a hint: the killer is: &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer</span><span class="p">))</span>
+			<span class="c1">##Add the instance to the hypotesis</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;ADD&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;OBJECTPROP&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">secondary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;IND&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;who&#39;</span><span class="p">,</span><span class="n">hypothesis</span><span class="p">,</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer</span><span class="p">]</span>
+			<span class="n">res</span><span class="o">=</span><span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">success</span>
+			<span class="k">if</span><span class="p">(</span><span class="n">res</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error to add the killer to: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hypothesis</span><span class="p">))</span>	
+		<span class="c1">##UPDATE the ontology</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;REASON&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">secondary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">success</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">res</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error: cannot update the ontology&#39;</span><span class="p">)</span>
+		<span class="c1">##Check if the current hypotesis is completed</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;QUERY&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;IND&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">secondary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;CLASS&#39;</span>
+		<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;COMPLETED&#39;</span><span class="p">]</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">queried_objects</span>
+		<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+		<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+			<span class="n">x</span><span class="o">=</span><span class="n">cut_string</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+			<span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">x</span>
+			<span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+			<span class="k">if</span> <span class="n">x</span><span class="o">==</span><span class="n">hypothesis</span><span class="p">:</span>
+				<span class="n">completed_hp</span><span class="o">=</span><span class="kc">True</span>
+		<span class="c1">##now res is an array of &#39;clean&#39; strings</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The list of all completed hypothesis is: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+		<span class="c1">##Check if the current hypothesis is not inconsistent</span>
+		<span class="c1">##If this is Completed</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">completed_hp</span><span class="o">==</span><span class="kc">True</span><span class="p">):</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;QUERY&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;IND&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">secondary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;CLASS&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;INCONSISTENT&#39;</span><span class="p">]</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">queried_objects</span>
+			<span class="n">j</span><span class="o">=</span><span class="mi">0</span>
+			<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+				<span class="n">x</span><span class="o">=</span><span class="n">cut_string</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+				<span class="n">res</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">x</span>
+				<span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span>
+				<span class="c1">##if the instruction is true, the hp is inconsistent</span>
+				<span class="k">if</span> <span class="n">x</span><span class="o">==</span><span class="n">hypothesis</span><span class="p">:</span>
+					<span class="n">inconsistent_count</span><span class="o">=</span><span class="n">inconsistent_count</span><span class="o">+</span><span class="mi">1</span>
+					<span class="n">inconsistent_list</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">inconsistent_list</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> 
+					<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;List of inconsistent hypothesis: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">inconsistent_list</span><span class="p">))</span>
+					<span class="k">return</span> <span class="s1">&#39;inconsistent_hypothesis&#39;</span>
+			<span class="n">inconsistent_count</span><span class="o">=</span><span class="n">inconsistent_count</span><span class="o">+</span><span class="mi">1</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;List of inconsistent hypothesis: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">inconsistent_list</span><span class="p">))</span>
+			<span class="k">return</span> <span class="s1">&#39;enter_cluedo_room&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="c1">##This case is not possible but is for future implementation</span>
+			<span class="k">return</span> <span class="s1">&#39;incompleted_hypothesis&#39;</span></div></div>
+
+
+<div class="viewcode-block" id="Tell_Hypothesis"><a class="viewcode-back" href="../../index.html#scripts.cluedo_fsm.Tell_Hypothesis">[docs]</a><span class="k">class</span> <span class="nc">Tell_Hypothesis</span><span class="p">(</span><span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Initialization of the Tell_Hypothesis state</span>
+<span class="sd">		Args:</span>
+<span class="sd">				outcomes:</span>
+<span class="sd">								incorrect_hypothesis: when an hyopothesis is evaulated incorrect go to Motion state</span>
+<span class="sd">								correct_hypothesis:when an hypothesis is evaulated correct go to CASE_SOLVED</span>
+<span class="sd">				input_keys:</span>
+<span class="sd">								killer: the acquired  murder </span>
+<span class="sd">								killer_weapon: the acquired killer weapon</span>
+<span class="sd">								killer_place: the acquired killer place</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+								<span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;incorrect_hypothesis&#39;</span><span class="p">,</span><span class="s1">&#39;correct_hypothesis&#39;</span><span class="p">],</span>
+								<span class="n">input_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;killer&#39;</span><span class="p">,</span><span class="s1">&#39;killer_weapon&#39;</span><span class="p">,</span><span class="s1">&#39;killer_place&#39;</span><span class="p">])</span>
+    
+<div class="viewcode-block" id="Tell_Hypothesis.execute"><a class="viewcode-back" href="../../index.html#scripts.cluedo_fsm.Tell_Hypothesis.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userdata</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Body of the Tell_Hypothesis state</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">global</span> <span class="n">true_what</span><span class="p">,</span><span class="n">true_where</span><span class="p">,</span><span class="n">true_who</span><span class="p">,</span><span class="n">armor_client</span><span class="p">,</span><span class="n">check_hp_client</span>
+		<span class="k">global</span> <span class="n">make_hint_client</span><span class="p">,</span><span class="n">to_room</span>
+		<span class="n">to_room</span><span class="o">=</span><span class="s1">&#39;Cluedo_Room&#39;</span>
+		<span class="c1">#Simulate time to arrive into cluedo_room</span>
+		<span class="n">time_response</span><span class="o">=</span><span class="n">time_to_explore</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">from_room</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">to_room</span><span class="p">))</span><span class="o">.</span><span class="n">time</span>
+		<span class="c1">#print(time_response)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Going to the cluedo room&#39;</span><span class="p">)</span>
+		<span class="c1">##simulate time to enter into the cluedo room</span>
+		<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">time_response</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;I am arrived in Cluedo Room&#39;</span><span class="p">)</span>
+		<span class="n">hp_to_check</span><span class="o">=</span><span class="n">ConvalidateHpRequest</span><span class="p">()</span>
+		<span class="n">hp_to_check</span><span class="o">.</span><span class="n">who</span><span class="o">=</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer</span>
+		<span class="n">hp_to_check</span><span class="o">.</span><span class="n">where</span><span class="o">=</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer_place</span>
+		<span class="n">hp_to_check</span><span class="o">.</span><span class="n">what</span><span class="o">=</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer_weapon</span>
+		<span class="n">oracle_res</span><span class="o">=</span><span class="n">check_hp_client</span><span class="p">(</span><span class="n">hp_to_check</span><span class="p">)</span>
+		<span class="c1">##check the value</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">oracle_res</span><span class="o">.</span><span class="n">who</span><span class="o">==</span><span class="kc">True</span><span class="p">):</span>
+			<span class="n">true_who</span><span class="o">=</span><span class="kc">True</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">oracle_res</span><span class="o">.</span><span class="n">where</span><span class="o">==</span><span class="kc">True</span><span class="p">):</span>
+			<span class="n">true_where</span><span class="o">=</span><span class="kc">True</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">oracle_res</span><span class="o">.</span><span class="n">what</span><span class="o">==</span><span class="kc">True</span><span class="p">):</span>
+			<span class="n">true_what</span><span class="o">=</span><span class="kc">True</span>
+		<span class="c1">##Check that all the three hints are true</span>
+		<span class="k">if</span><span class="p">((</span><span class="n">true_what</span><span class="o">==</span><span class="kc">True</span><span class="p">)</span><span class="ow">and</span><span class="p">(</span><span class="n">true_where</span><span class="o">==</span><span class="kc">True</span><span class="p">)</span><span class="ow">and</span><span class="p">(</span><span class="n">true_who</span><span class="o">==</span><span class="kc">True</span><span class="p">)):</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The game is end&#39;</span><span class="p">)</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The killer is: &#39;</span> <span class="o">+</span>  <span class="nb">str</span><span class="p">(</span><span class="n">hp_to_check</span><span class="o">.</span><span class="n">who</span><span class="p">))</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The place is: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hp_to_check</span><span class="o">.</span><span class="n">where</span><span class="p">))</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The weapon is:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hp_to_check</span><span class="o">.</span><span class="n">what</span><span class="p">))</span>
+			<span class="c1">##Save the Ontology</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;SAVE&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">secondary_command_spec</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+			<span class="n">req</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span><span class="p">]</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">success</span>
+			<span class="k">if</span><span class="p">(</span><span class="n">res</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error:cannot save the ontology solution&#39;</span><span class="p">)</span>
+			<span class="k">return</span> <span class="s1">&#39;correct_hypothesis&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The hypotesis is wrong&#39;</span><span class="p">)</span>			
+			<span class="k">return</span> <span class="s1">&#39;incorrect_hypothesis&#39;</span>
+		<span class="k">return</span> </div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../index.html#scripts.cluedo_fsm.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Body of the main function</span>
+<span class="sd">	Initialize the node as cluedo_FSM</span>
+<span class="sd">	Create a client of the armor server to deal with armor</span>
+<span class="sd">	Create a client of the hp_convalidation server to says the hypothesis to the oracle</span>
+<span class="sd">	Create a client of the make_hint server to acquire hints</span>
+<span class="sd">	Create a client of the time_to_move server to calculate the time needed to change room</span>
+<span class="sd">	Create the SMACH state machine and define the outcomes of FSM as CASE_SOLVED</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">global</span> <span class="n">armor_client</span><span class="p">,</span><span class="n">check_hp_client</span><span class="p">,</span><span class="n">time_to_explore</span><span class="p">,</span><span class="n">make_hint_client</span>
+	<span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;cluedo_FSM&#39;</span><span class="p">)</span>
+	<span class="c1">##Create services client</span>
+	<span class="n">armor_client</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ServiceProxy</span><span class="p">(</span><span class="s1">&#39;armor_interface_srv&#39;</span><span class="p">,</span> <span class="n">ArmorDirective</span><span class="p">)</span> 
+	<span class="n">check_hp_client</span><span class="o">=</span><span class="n">rospy</span><span class="o">.</span><span class="n">ServiceProxy</span><span class="p">(</span><span class="s1">&#39;hp_convalidation&#39;</span><span class="p">,</span><span class="n">ConvalidateHp</span><span class="p">)</span>
+	<span class="n">make_hint_client</span><span class="o">=</span><span class="n">rospy</span><span class="o">.</span><span class="n">ServiceProxy</span><span class="p">(</span><span class="s1">&#39;make_hint&#39;</span><span class="p">,</span><span class="n">MakeHp</span><span class="p">)</span>
+	<span class="n">time_to_explore</span><span class="o">=</span><span class="n">rospy</span><span class="o">.</span><span class="n">ServiceProxy</span><span class="p">(</span><span class="s1">&#39;time_to_move&#39;</span><span class="p">,</span><span class="n">TimeToWait</span><span class="p">)</span>
+	
+	<span class="c1">##Create a SMACH state machine</span>
+	<span class="n">sm</span> <span class="o">=</span> <span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="p">(</span><span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CASE_SOLVED&#39;</span><span class="p">])</span>
+	<span class="n">sm</span><span class="o">.</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+	<span class="n">sm</span><span class="o">.</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer_weapon</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+	<span class="n">sm</span><span class="o">.</span><span class="n">userdata</span><span class="o">.</span><span class="n">killer_place</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+	<span class="c1">##Open the container</span>
+	<span class="k">with</span> <span class="n">sm</span><span class="p">:</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Function used to define the links between FSM&#39; s states</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1">##Add states to the container</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;MOTION&#39;</span><span class="p">,</span> <span class="n">Motion</span><span class="p">(),</span> 
+								<span class="n">transitions</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;enter_room&#39;</span><span class="p">:</span><span class="s1">&#39;ACQUIRE_HINTS&#39;</span><span class="p">})</span>
+
+		<span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;ACQUIRE_HINTS&#39;</span><span class="p">,</span> <span class="n">Acquire_Hints</span><span class="p">(),</span> 
+								<span class="n">transitions</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;enter_cluedo_room&#39;</span><span class="p">:</span><span class="s1">&#39;TELL_HYPOTHESIS&#39;</span><span class="p">,</span>
+												<span class="s1">&#39;inconsistent_hypothesis&#39;</span><span class="p">:</span><span class="s1">&#39;MOTION&#39;</span><span class="p">,</span>
+												<span class="s1">&#39;incompleted_hypothesis&#39;</span><span class="p">:</span><span class="s1">&#39;MOTION&#39;</span><span class="p">})</span>
+
+		<span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;TELL_HYPOTHESIS&#39;</span><span class="p">,</span> <span class="n">Tell_Hypothesis</span><span class="p">(),</span> 
+								<span class="n">transitions</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;incorrect_hypothesis&#39;</span><span class="p">:</span><span class="s1">&#39;MOTION&#39;</span><span class="p">,</span> 
+											<span class="s1">&#39;correct_hypothesis&#39;</span><span class="p">:</span><span class="s1">&#39;CASE_SOLVED&#39;</span><span class="p">})</span>
+                                            
+	<span class="c1">##Create and start the introspection server for visualization</span>
+	<span class="n">sis</span> <span class="o">=</span> <span class="n">smach_ros</span><span class="o">.</span><span class="n">IntrospectionServer</span><span class="p">(</span><span class="s1">&#39;server_name&#39;</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="s1">&#39;/SM_ROOT&#39;</span><span class="p">)</span>
+	<span class="n">sis</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+	<span class="c1">##Execute the state machine</span>
+	<span class="n">outcome</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+
+	<span class="c1">##Wait for ctrl-c to stop the application</span>
+	<span class="n">rospy</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+	<span class="n">sis</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">main</span><span class="p">()</span>                         
+
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Ermanno Girardo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

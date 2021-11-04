@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="dir_53e6fa9553ac22a5646d2a2b2d7b97a1" kind="dir">
+    <compoundname>scripts</compoundname>
+    <innerfile refid="cluedo__fsm_8py">cluedo_fsm.py</innerfile>
+    <innerfile refid="load__ontology_8py">load_ontology.py</innerfile>
+    <innerfile refid="simulation__time_8py">simulation_time.py</innerfile>
+    <innerfile refid="the__oracle_8py">the_oracle.py</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="scripts/"/>
+  </compounddef>
+</doxygen>

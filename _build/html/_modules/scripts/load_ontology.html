@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.load_ontology &mdash; exproblab_assignment_1 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> exproblab_assignment_1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">exproblab_assignment_1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.load_ontology</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.load_ontology</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">from</span> <span class="nn">armor_msgs.srv</span> <span class="kn">import</span> <span class="o">*</span> 
+<span class="kn">from</span> <span class="nn">armor_msgs.msg</span> <span class="kn">import</span> <span class="o">*</span> 
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1">##Global variable</span>
+<span class="n">path</span><span class="o">=</span><span class="kc">None</span>
+<span class="c1">#path=rospy.get_param(&quot;/path_to_load&quot;)</span>
+<span class="c1">#path=str(path)</span>
+
+<div class="viewcode-block" id="load_ontology"><a class="viewcode-back" href="../../index.html#scripts.load_ontology.load_ontology">[docs]</a><span class="k">def</span> <span class="nf">load_ontology</span><span class="p">(</span><span class="n">command</span><span class="p">,</span><span class="n">primary_command_spec</span><span class="p">,</span><span class="n">secondary_command_spec</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Function used to load the ontology on the armor server</span>
+<span class="sd">	Instanciate a client of the armor server</span>
+<span class="sd">	Args:</span>
+<span class="sd">			command: is the command to pass at armor to load the ontology</span>
+<span class="sd">			primary_command_spec: is the primary command to pass at armor to load the ontology</span>
+<span class="sd">			secondary_command_spec: is the secondary command to pass at armor to load the ontology</span>
+<span class="sd">			args: is an array of arguments to pass at armor to load the ontology</span>
+<span class="sd">	Returns:</span>
+<span class="sd">			res: the armor service response</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">rospy</span><span class="o">.</span><span class="n">wait_for_service</span><span class="p">(</span><span class="s1">&#39;armor_interface_srv&#39;</span><span class="p">)</span>
+	<span class="n">armor_client</span><span class="o">=</span><span class="n">rospy</span><span class="o">.</span><span class="n">ServiceProxy</span><span class="p">(</span><span class="s1">&#39;armor_interface_srv&#39;</span><span class="p">,</span> <span class="n">ArmorDirective</span><span class="p">)</span>
+	<span class="n">req</span><span class="o">=</span><span class="n">ArmorDirectiveReq</span><span class="p">()</span>
+	<span class="n">req</span><span class="o">.</span><span class="n">client_name</span><span class="o">=</span><span class="s1">&#39;cluedo_fsm&#39;</span>
+	<span class="n">req</span><span class="o">.</span><span class="n">reference_name</span><span class="o">=</span><span class="s1">&#39;cluedo_ontology&#39;</span>
+	<span class="n">req</span><span class="o">.</span><span class="n">command</span><span class="o">=</span><span class="n">command</span>
+	<span class="n">req</span><span class="o">.</span><span class="n">primary_command_spec</span> <span class="o">=</span> <span class="n">primary_command_spec</span>
+	<span class="n">req</span><span class="o">.</span><span class="n">secondary_command_spec</span><span class="o">=</span><span class="n">secondary_command_spec</span>
+	<span class="n">req</span><span class="o">.</span><span class="n">args</span><span class="o">=</span><span class="n">args</span>
+	<span class="n">res</span><span class="o">=</span><span class="n">armor_client</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">res</span></div>
+
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../index.html#scripts.load_ontology.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	The body of the main function</span>
+<span class="sd">	Initialize the node as armor_interface</span>
+<span class="sd">	Pass all the arguments to the load_ontology function</span>
+<span class="sd">	</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;armor_interface&#39;</span><span class="p">)</span>
+	<span class="n">response</span><span class="o">=</span><span class="n">load_ontology</span><span class="p">(</span><span class="s1">&#39;LOAD&#39;</span><span class="p">,</span> <span class="s1">&#39;FILE&#39;</span> <span class="p">,</span> <span class="s1">&#39;&#39;</span> <span class="p">,</span> <span class="p">[</span><span class="n">path</span><span class="p">,</span><span class="s1">&#39;http://www.emarolab.it/cluedo-ontology&#39;</span><span class="p">,</span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;PELLET&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">])</span>
+	<span class="c1">##Check if the ontology is correctly loaded</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">success</span><span class="o">==</span><span class="kc">False</span><span class="p">):</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error: cannot load the ontology&#39;</span><span class="p">)</span>
+		<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+	<span class="k">elif</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">armor_response</span><span class="o">.</span><span class="n">success</span><span class="o">==</span><span class="kc">True</span><span class="p">):</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The ontology is correctly loaded&#39;</span><span class="p">)</span>
+	<span class="n">rospy</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+	<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span> <span class="p">:</span>
+	<span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Ermanno Girardo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

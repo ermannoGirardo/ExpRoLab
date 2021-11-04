@@ -1,0 +1,105 @@
+\hypertarget{namespacethe__oracle}{}\doxysection{the\+\_\+oracle Namespace Reference}
+\label{namespacethe__oracle}\index{the\_oracle@{the\_oracle}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacethe__oracle_a151b40c82302e8be20029d21ca08d0a9}{clbk\+\_\+convalidation}} (req)
+\item 
+def \mbox{\hyperlink{namespacethe__oracle_ade740f09f83c48158015401165ac4acf}{clbk\+\_\+make\+\_\+hint}} (req)
+\item 
+def \mbox{\hyperlink{namespacethe__oracle_abaf7b21eda27827384a61f7794f3eef2}{main}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacethe__oracle_a38df538dc33c6e8ed16bc357b18edcd0}{who}} = None
+\begin{DoxyCompactList}\small\item\em The oracle know the true hypotesis Global variables for indentify the true hypotesis Get the param and set the global variables. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacethe__oracle_ae6fc0434825c6b6cea5a58f8d232f6ed}{where}} = None
+\item 
+\mbox{\hyperlink{namespacethe__oracle_a6af357a4ec6d6e94d5acefc432907f58}{what}} = None
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacethe__oracle_a151b40c82302e8be20029d21ca08d0a9}\label{namespacethe__oracle_a151b40c82302e8be20029d21ca08d0a9}} 
+\index{the\_oracle@{the\_oracle}!clbk\_convalidation@{clbk\_convalidation}}
+\index{clbk\_convalidation@{clbk\_convalidation}!the\_oracle@{the\_oracle}}
+\doxysubsubsection{\texorpdfstring{clbk\_convalidation()}{clbk\_convalidation()}}
+{\footnotesize\ttfamily def the\+\_\+oracle.\+clbk\+\_\+convalidation (\begin{DoxyParamCaption}\item[{}]{req }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}The function callback of  hypotesis_convalidation custom service
+Args:
+        (ConvalidateHp) req: is the request made by the client composed of
+        (string) who: is the killer that the robot has acquired
+        (string) where: is the place that the robot has acquired
+        (string) what: is the weapon that the robot has acquired
+Returns:
+        (ConvalidateHpResponse) res: the resonse from the server composed by
+        (bool) who: if the person is correct return True
+        (bool) where: if the place is correct return True
+        (bool) what: if the weapon is correct return True
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacethe__oracle_ade740f09f83c48158015401165ac4acf}\label{namespacethe__oracle_ade740f09f83c48158015401165ac4acf}} 
+\index{the\_oracle@{the\_oracle}!clbk\_make\_hint@{clbk\_make\_hint}}
+\index{clbk\_make\_hint@{clbk\_make\_hint}!the\_oracle@{the\_oracle}}
+\doxysubsubsection{\texorpdfstring{clbk\_make\_hint()}{clbk\_make\_hint()}}
+{\footnotesize\ttfamily def the\+\_\+oracle.\+clbk\+\_\+make\+\_\+hint (\begin{DoxyParamCaption}\item[{}]{req }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function callback of make_hint custom service
+Args:
+        (MakeHp) req: the request of client composed by
+        (string) arg: the type of hints that robot wants to acquire
+Returns:
+        (string) hint: the instance of the argument requested 
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacethe__oracle_abaf7b21eda27827384a61f7794f3eef2}\label{namespacethe__oracle_abaf7b21eda27827384a61f7794f3eef2}} 
+\index{the\_oracle@{the\_oracle}!main@{main}}
+\index{main@{main}!the\_oracle@{the\_oracle}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily def the\+\_\+oracle.\+main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Body of main function
+Initialization of check_hypothesis node
+Desclaration of hp_convalidation custom service
+Args:
+        (ConvalidateHp) req: is the request made by the client composed of
+        (string) who: is the killer that the robot has acquired
+        (string) where: is the place that the robot has acquired
+        (string) what: is the weapon that the robot has acquired
+Returns:
+        (ConvalidateHpResponse) res: the resonse from the server composed by
+        (bool) who: if the person is correct return True
+        (bool) where: if the place is correct return True
+        (bool) what: if the weapon is correct return True
+Desclaration of make_hint custom service
+Args:
+        (MakeHp) req: the request of client composed by
+        (string) arg: the type of hints that robot wants to acquire
+Returns:
+        (string) hint: the instance of the argument requested 
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacethe__oracle_a6af357a4ec6d6e94d5acefc432907f58}\label{namespacethe__oracle_a6af357a4ec6d6e94d5acefc432907f58}} 
+\index{the\_oracle@{the\_oracle}!what@{what}}
+\index{what@{what}!the\_oracle@{the\_oracle}}
+\doxysubsubsection{\texorpdfstring{what}{what}}
+{\footnotesize\ttfamily the\+\_\+oracle.\+what = None}
+
+\mbox{\Hypertarget{namespacethe__oracle_ae6fc0434825c6b6cea5a58f8d232f6ed}\label{namespacethe__oracle_ae6fc0434825c6b6cea5a58f8d232f6ed}} 
+\index{the\_oracle@{the\_oracle}!where@{where}}
+\index{where@{where}!the\_oracle@{the\_oracle}}
+\doxysubsubsection{\texorpdfstring{where}{where}}
+{\footnotesize\ttfamily the\+\_\+oracle.\+where = None}
+
+\mbox{\Hypertarget{namespacethe__oracle_a38df538dc33c6e8ed16bc357b18edcd0}\label{namespacethe__oracle_a38df538dc33c6e8ed16bc357b18edcd0}} 
+\index{the\_oracle@{the\_oracle}!who@{who}}
+\index{who@{who}!the\_oracle@{the\_oracle}}
+\doxysubsubsection{\texorpdfstring{who}{who}}
+{\footnotesize\ttfamily the\+\_\+oracle.\+who = None}
+
+
+
+The oracle know the true hypotesis Global variables for indentify the true hypotesis Get the param and set the global variables. 
+

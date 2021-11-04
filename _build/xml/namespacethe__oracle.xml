@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="namespacethe__oracle" kind="namespace" language="Python">
+    <compoundname>the_oracle</compoundname>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="the__oracle_8py_1a38df538dc33c6e8ed16bc357b18edcd0" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>the_oracle.who</definition>
+        <argsstring></argsstring>
+        <name>who</name>
+        <initializer>= None</initializer>
+        <briefdescription>
+<para>The oracle know the true hypotesis Global variables for indentify the true hypotesis Get the param and set the global variables. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/the_oracle.py" line="13" column="1" bodyfile="scripts/the_oracle.py" bodystart="13" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="the__oracle_8py_1ae6fc0434825c6b6cea5a58f8d232f6ed" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>the_oracle.where</definition>
+        <argsstring></argsstring>
+        <name>where</name>
+        <initializer>= None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/the_oracle.py" line="14" column="1" bodyfile="scripts/the_oracle.py" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="the__oracle_8py_1a6af357a4ec6d6e94d5acefc432907f58" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>the_oracle.what</definition>
+        <argsstring></argsstring>
+        <name>what</name>
+        <initializer>= None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/the_oracle.py" line="15" column="1" bodyfile="scripts/the_oracle.py" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="the__oracle_8py_1a151b40c82302e8be20029d21ca08d0a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def the_oracle.clbk_convalidation</definition>
+        <argsstring>(req)</argsstring>
+        <name>clbk_convalidation</name>
+        <param>
+          <type>req</type>
+          <defname>req</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>The function callback of  hypotesis_convalidation custom service
+Args:
+        (ConvalidateHp) req: is the request made by the client composed of
+        (string) who: is the killer that the robot has acquired
+        (string) where: is the place that the robot has acquired
+        (string) what: is the weapon that the robot has acquired
+Returns:
+        (ConvalidateHpResponse) res: the resonse from the server composed by
+        (bool) who: if the person is correct return True
+        (bool) where: if the place is correct return True
+        (bool) what: if the weapon is correct return True
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/the_oracle.py" line="23" column="1" bodyfile="scripts/the_oracle.py" bodystart="23" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="the__oracle_8py_1ade740f09f83c48158015401165ac4acf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def the_oracle.clbk_make_hint</definition>
+        <argsstring>(req)</argsstring>
+        <name>clbk_make_hint</name>
+        <param>
+          <type>req</type>
+          <defname>req</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function callback of make_hint custom service
+Args:
+        (MakeHp) req: the request of client composed by
+        (string) arg: the type of hints that robot wants to acquire
+Returns:
+        (string) hint: the instance of the argument requested 
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/the_oracle.py" line="55" column="1" bodyfile="scripts/the_oracle.py" bodystart="55" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="the__oracle_8py_1abaf7b21eda27827384a61f7794f3eef2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def the_oracle.main</definition>
+        <argsstring>()</argsstring>
+        <name>main</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Body of main function
+Initialization of check_hypothesis node
+Desclaration of hp_convalidation custom service
+Args:
+        (ConvalidateHp) req: is the request made by the client composed of
+        (string) who: is the killer that the robot has acquired
+        (string) where: is the place that the robot has acquired
+        (string) what: is the weapon that the robot has acquired
+Returns:
+        (ConvalidateHpResponse) res: the resonse from the server composed by
+        (bool) who: if the person is correct return True
+        (bool) where: if the place is correct return True
+        (bool) what: if the weapon is correct return True
+Desclaration of make_hint custom service
+Args:
+        (MakeHp) req: the request of client composed by
+        (string) arg: the type of hints that robot wants to acquire
+Returns:
+        (string) hint: the instance of the argument requested 
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/the_oracle.py" line="97" column="1" bodyfile="scripts/the_oracle.py" bodystart="97" bodyend="125"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="scripts/the_oracle.py" line="1" column="1"/>
+  </compounddef>
+</doxygen>

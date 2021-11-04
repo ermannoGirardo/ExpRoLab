@@ -1,0 +1,7 @@
+string who
+string what
+string where
+---
+bool who
+bool what
+bool where

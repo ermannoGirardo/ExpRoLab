@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="namespaceload__ontology" kind="namespace" language="Python">
+    <compoundname>load_ontology</compoundname>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="load__ontology_8py_1a081c683886ef43fc051ffd9de3fdb189" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>load_ontology.path</definition>
+        <argsstring></argsstring>
+        <name>path</name>
+        <initializer>= None</initializer>
+        <briefdescription>
+<para>Global variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/load_ontology.py" line="9" column="1" bodyfile="scripts/load_ontology.py" bodystart="9" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="load__ontology_8py_1a10f97b52889f768d456252a4dedfa2a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def load_ontology.load_ontology</definition>
+        <argsstring>(command, primary_command_spec, secondary_command_spec, args)</argsstring>
+        <name>load_ontology</name>
+        <param>
+          <type>command</type>
+          <defname>command</defname>
+        </param>
+        <param>
+          <type>primary_command_spec</type>
+          <defname>primary_command_spec</defname>
+        </param>
+        <param>
+          <type>secondary_command_spec</type>
+          <defname>secondary_command_spec</defname>
+        </param>
+        <param>
+          <type>args</type>
+          <defname>args</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function used to load the ontology on the armor server
+Instanciate a client of the armor server
+Args:
+        command: is the command to pass at armor to load the ontology
+        primary_command_spec: is the primary command to pass at armor to load the ontology
+        secondary_command_spec: is the secondary command to pass at armor to load the ontology
+        args: is an array of arguments to pass at armor to load the ontology
+Returns:
+        res: the armor service response
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/load_ontology.py" line="13" column="1" bodyfile="scripts/load_ontology.py" bodystart="13" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="load__ontology_8py_1a9391fed2e9aa1fe018e1820c206b7316" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def load_ontology.main</definition>
+        <argsstring>()</argsstring>
+        <name>main</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>The body of the main function
+Initialize the node as armor_interface
+Pass all the arguments to the load_ontology function</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/load_ontology.py" line="39" column="1" bodyfile="scripts/load_ontology.py" bodystart="39" bodyend="56"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="scripts/load_ontology.py" line="1" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classcluedo__fsm_1_1_acquire___hints" kind="class" language="Python" prot="public">
+    <compoundname>cluedo_fsm::Acquire_Hints</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">State</basecompoundref>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcluedo__fsm_1_1_acquire___hints_1a1e4032e87de3a4df968a288a12e0f2b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def cluedo_fsm.Acquire_Hints.__init__</definition>
+        <argsstring>(self)</argsstring>
+        <name>__init__</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Initialization of Acquire_Hints state
+Args:
+outcomes:
+                enter_cluedo_room: once an hypotesis is completed and consistent
+                inconsistent_hypotesis: when an hypothesis is inconsistent go to Motion state
+                incompleted_hypothesis:when an hypothesis is incompleted go to Motion state
+input_keys:
+                killer: the acquired  murder 
+                killer_weapon: the acquired killer weapon
+                killer_place: the acquired killer place
+output_keys:
+                killer: the acquired  murder 
+                killer_weapon: the acquired killer weapon
+                killer_place: the acquired killer place
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="168" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="168" bodyend="190"/>
+      </memberdef>
+      <memberdef kind="function" id="classcluedo__fsm_1_1_acquire___hints_1a6750ee2d1bc33fe4c647a1013acfc8f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def cluedo_fsm.Acquire_Hints.execute</definition>
+        <argsstring>(self, userdata)</argsstring>
+        <name>execute</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>userdata</type>
+          <defname>userdata</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Body of the Acquire_Hints state
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="191" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="191" bodyend="312"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>State</label>
+      </node>
+      <node id="1">
+        <label>cluedo_fsm.Acquire_Hints</label>
+        <link refid="classcluedo__fsm_1_1_acquire___hints"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>State</label>
+      </node>
+      <node id="1">
+        <label>cluedo_fsm.Acquire_Hints</label>
+        <link refid="classcluedo__fsm_1_1_acquire___hints"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="scripts/cluedo_fsm.py" line="167" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="167" bodyend="313"/>
+    <listofallmembers>
+      <member refid="classcluedo__fsm_1_1_acquire___hints_1a1e4032e87de3a4df968a288a12e0f2b1" prot="public" virt="non-virtual"><scope>cluedo_fsm::Acquire_Hints</scope><name>__init__</name></member>
+      <member refid="classcluedo__fsm_1_1_acquire___hints_1a6750ee2d1bc33fe4c647a1013acfc8f8" prot="public" virt="non-virtual"><scope>cluedo_fsm::Acquire_Hints</scope><name>execute</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,314 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="namespacecluedo__fsm" kind="namespace" language="Python">
+    <compoundname>cluedo_fsm</compoundname>
+    <innerclass refid="classcluedo__fsm_1_1_acquire___hints" prot="public">cluedo_fsm::Acquire_Hints</innerclass>
+    <innerclass refid="classcluedo__fsm_1_1_motion" prot="public">cluedo_fsm::Motion</innerclass>
+    <innerclass refid="classcluedo__fsm_1_1_tell___hypothesis" prot="public">cluedo_fsm::Tell_Hypothesis</innerclass>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacecluedo__fsm_1a253b88c0ef6cf0ccba8f33bf58b8cecb" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>cluedo_fsm.armor_client</definition>
+        <argsstring></argsstring>
+        <name>armor_client</name>
+        <initializer>= None</initializer>
+        <briefdescription>
+<para>Global Variables. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Define the armor server </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="56" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1abacce27704a3f874f6da8641663d8fa5" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>cluedo_fsm.req</definition>
+        <argsstring></argsstring>
+        <name>req</name>
+        <initializer>=  ArmorDirectiveReq()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="57" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1a498e4caa046c79a29d47452417724d6a" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>cluedo_fsm.client_name</definition>
+        <argsstring></argsstring>
+        <name>client_name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="58" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1af5c55da96f7f31ff924d43f052f8610b" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>cluedo_fsm.reference_name</definition>
+        <argsstring></argsstring>
+        <name>reference_name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="59" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1a5d13e34664446089ad4b644154af68d2" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int cluedo_fsm.time_to_detect</definition>
+        <argsstring></argsstring>
+        <name>time_to_detect</name>
+        <initializer>= 3</initializer>
+        <briefdescription>
+<para>time to detect hints in seconds </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="62" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1aba48991961dfa2dbe4e8ebf914fee53b" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cluedo_fsm.true_who</definition>
+        <argsstring></argsstring>
+        <name>true_who</name>
+        <initializer>= False</initializer>
+        <briefdescription>
+<para>boolean values for the hints </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="65" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1adfb69991706d7dbf50d8c208ee56ae2a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cluedo_fsm.true_where</definition>
+        <argsstring></argsstring>
+        <name>true_where</name>
+        <initializer>= False</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="66" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1a14f6d36607be3ee2526daf9d78dfaa19" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cluedo_fsm.true_what</definition>
+        <argsstring></argsstring>
+        <name>true_what</name>
+        <initializer>= False</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="67" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1ace434ad0d48bd0ab13adc2eace97006d" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int cluedo_fsm.HP_counter</definition>
+        <argsstring></argsstring>
+        <name>HP_counter</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>hypothesis counter </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="70" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1a82ff877b634604c5dcc700181d75ede1" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>cluedo_fsm.path</definition>
+        <argsstring></argsstring>
+        <name>path</name>
+        <initializer>= None</initializer>
+        <briefdescription>
+<para>path to save the onrology </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="73" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1a2e17f93a39e5ceb36a55c5fd7ea7e20e" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string cluedo_fsm.from_room</definition>
+        <argsstring></argsstring>
+        <name>from_room</name>
+        <initializer>= &apos;Cluedo_Room&apos;</initializer>
+        <briefdescription>
+<para>variables to compute time to change room Suppose the robot starts in the cluedo room </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="79" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1abdcd34fe10d4169a74eb8be55d2c8c8a" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>cluedo_fsm.to_room</definition>
+        <argsstring></argsstring>
+        <name>to_room</name>
+        <initializer>= None</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="80" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1ada2c2e132d7c7afb878d47e7ce449008" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cluedo_fsm.completed_hp</definition>
+        <argsstring></argsstring>
+        <name>completed_hp</name>
+        <initializer>= False</initializer>
+        <briefdescription>
+<para>boolean for completed hypothesis </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="83" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1a281303730cdf039b2065890ca69f2e8a" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int cluedo_fsm.inconsistent_count</definition>
+        <argsstring></argsstring>
+        <name>inconsistent_count</name>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>varialable to generate a inconsistent hypotesis </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="86" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecluedo__fsm_1abca74d1fec9b57b0a014f07fe7bba121" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string cluedo_fsm.inconsistent_list</definition>
+        <argsstring></argsstring>
+        <name>inconsistent_list</name>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="87" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecluedo__fsm_1a0b7022e33adb2ba2565717bc162d2595" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def cluedo_fsm.cut_string</definition>
+        <argsstring>(string)</argsstring>
+        <name>cut_string</name>
+        <param>
+          <type>string</type>
+          <defname>string</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Simple function to cut the armor response string
+Args:
+        string:string to cut
+Returns:
+        string:string cutted
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="89" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="89" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecluedo__fsm_1a750668964c31557290ac9db1e21125ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def cluedo_fsm.main</definition>
+        <argsstring>()</argsstring>
+        <name>main</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Body of the main function
+Initialize the node as cluedo_FSM
+Create a client of the armor server to deal with armor
+Create a client of the hp_convalidation server to says the hypothesis to the oracle
+Create a client of the make_hint server to acquire hints
+Create a client of the time_to_move server to calculate the time needed to change room
+Create the SMACH state machine and define the outcomes of FSM as CASE_SOLVED
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="scripts/cluedo_fsm.py" line="377" column="1" bodyfile="scripts/cluedo_fsm.py" bodystart="377" bodyend="429"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><verbatim>.. module:: cluedo_fsm
+   :platform: Unix
+   :synopsis: Implementation of a FSM for playing cluedo game
+.. moduleauthor:: Ermanno Girardo  &lt;s4506472@studenti.unige.it&gt;
+Client to: &lt;BR&gt;
+     /armor_interface_srv:  the armor server to manage ontologies
+     
+     /hp_convalidation: custom service to tell the hypothesis to the oracle
+     
+     /make_hint: custom service to acquire hints once the robot is in a room
+     
+     /time_to_move: custom service to generate the time to move to another room
+     
+     
+     This node is the implementation of the state machine.
+     It is composed by three states:
+        -Moving: The robot starting from the Cluedo Room has to move to another room
+                        in order to acquire hints.
+                        This state simulate the motion of the robot, asking to simulation_time server 
+                        to compute the time needed to move from a room to another room.
+        -Acquire Hints: Once the robot is arrived into the room, starts to acquire hints.
+                                    There is a call to the oracle to making a hint. Via a custom service
+                                    the oracle randomically chooses an instance of type specified by the client
+                                    and return a string of the instace to the client.
+                                    If the hypotesis is completed and not consistent then go to the next state 
+                                    on the contrary if it is not return to moving state and  the Robot should 
+                                    build a new hypotesis.
+        -Tell Hypotesis: Once an hypotesis is completed and consistent the robot should go to the
+                                    Cluedo Room and tell the hypotesis to the oracle. The oracle check each field 
+                                    of the hypotesis and then says to the robot if the hypothesis is correct or not.
+                                    Internally the oracle says for each of the three fields if it is correct or not.
+                                    In this way, for example, if the robot knows that Mrs Peacock is the killer next 
+                                    time that acquire hints avoids to acquire new hints for the killer.
+                                    This is a chooice, in order to do not grow exponencially the number of hypothesis
+                                    before knowing the solution.</verbatim> </para>
+    </detaileddescription>
+    <location file="scripts/cluedo_fsm.py" line="1" column="1"/>
+  </compounddef>
+</doxygen>

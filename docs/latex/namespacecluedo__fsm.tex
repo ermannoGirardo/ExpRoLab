@@ -1,0 +1,238 @@
+\hypertarget{namespacecluedo__fsm}{}\doxysection{cluedo\+\_\+fsm Namespace Reference}
+\label{namespacecluedo__fsm}\index{cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcluedo__fsm_1_1_acquire___hints}{Acquire\+\_\+\+Hints}}
+\item 
+class \mbox{\hyperlink{classcluedo__fsm_1_1_motion}{Motion}}
+\item 
+class \mbox{\hyperlink{classcluedo__fsm_1_1_tell___hypothesis}{Tell\+\_\+\+Hypothesis}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacecluedo__fsm_a0b7022e33adb2ba2565717bc162d2595}{cut\+\_\+string}} (string)
+\item 
+def \mbox{\hyperlink{namespacecluedo__fsm_a750668964c31557290ac9db1e21125ff}{main}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacecluedo__fsm_a253b88c0ef6cf0ccba8f33bf58b8cecb}{armor\+\_\+client}} = None
+\begin{DoxyCompactList}\small\item\em Global Variables. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacecluedo__fsm_abacce27704a3f874f6da8641663d8fa5}{req}} = Armor\+Directive\+Req()
+\item 
+\mbox{\hyperlink{namespacecluedo__fsm_a498e4caa046c79a29d47452417724d6a}{client\+\_\+name}}
+\item 
+\mbox{\hyperlink{namespacecluedo__fsm_af5c55da96f7f31ff924d43f052f8610b}{reference\+\_\+name}}
+\item 
+int \mbox{\hyperlink{namespacecluedo__fsm_a5d13e34664446089ad4b644154af68d2}{time\+\_\+to\+\_\+detect}} = 3
+\begin{DoxyCompactList}\small\item\em time to detect hints in seconds \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{namespacecluedo__fsm_aba48991961dfa2dbe4e8ebf914fee53b}{true\+\_\+who}} = False
+\begin{DoxyCompactList}\small\item\em boolean values for the hints \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{namespacecluedo__fsm_adfb69991706d7dbf50d8c208ee56ae2a}{true\+\_\+where}} = False
+\item 
+bool \mbox{\hyperlink{namespacecluedo__fsm_a14f6d36607be3ee2526daf9d78dfaa19}{true\+\_\+what}} = False
+\item 
+int \mbox{\hyperlink{namespacecluedo__fsm_ace434ad0d48bd0ab13adc2eace97006d}{H\+P\+\_\+counter}} = 0
+\begin{DoxyCompactList}\small\item\em hypothesis counter \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacecluedo__fsm_a82ff877b634604c5dcc700181d75ede1}{path}} = None
+\begin{DoxyCompactList}\small\item\em path to save the onrology \end{DoxyCompactList}\item 
+string \mbox{\hyperlink{namespacecluedo__fsm_a2e17f93a39e5ceb36a55c5fd7ea7e20e}{from\+\_\+room}} = \textquotesingle{}Cluedo\+\_\+\+Room\textquotesingle{}
+\begin{DoxyCompactList}\small\item\em variables to compute time to change room Suppose the robot starts in the cluedo room \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacecluedo__fsm_abdcd34fe10d4169a74eb8be55d2c8c8a}{to\+\_\+room}} = None
+\item 
+bool \mbox{\hyperlink{namespacecluedo__fsm_ada2c2e132d7c7afb878d47e7ce449008}{completed\+\_\+hp}} = False
+\begin{DoxyCompactList}\small\item\em boolean for completed hypothesis \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacecluedo__fsm_a281303730cdf039b2065890ca69f2e8a}{inconsistent\+\_\+count}} = 1
+\begin{DoxyCompactList}\small\item\em varialable to generate a inconsistent hypotesis \end{DoxyCompactList}\item 
+string \mbox{\hyperlink{namespacecluedo__fsm_abca74d1fec9b57b0a014f07fe7bba121}{inconsistent\+\_\+list}} = \textquotesingle{}\textquotesingle{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}.. module:: cluedo_fsm
+   :platform: Unix
+   :synopsis: Implementation of a FSM for playing cluedo game
+.. moduleauthor:: Ermanno Girardo  <s4506472@studenti.unige.it>
+Client to: <BR>
+     /armor_interface_srv
+     /hp_convalidation
+     /make_hint
+     /time_to_move
+     This node is the implementation of the state machine.
+     It is composed by three states:
+        -Moving: The robot starting from the Cluedo Room has to move to another room
+                        in order to acquire hints.
+                        This state simulate the motion of the robot, asking to simulation_time server 
+                        to compute the time needed to move from a room to another room.
+        -Acquire Hints: Once the robot is arrived into the room, starts to acquire hints.
+                                    There is a call to the oracle to making a hint. Via a custom service
+                                    the oracle randomically chooses an instance of type specified by the client
+                                    and return a string of the instace to the client.
+                                    If the hypotesis is completed and not consistent then go to the next state 
+                                    on the contrary if it is not return to moving state and  the Robot should 
+                                    build a new hypotesis.
+        -Tell Hypotesis: Once an hypotesis is completed and consistent the robot should go to the
+                                    Cluedo Room and tell the hypotesis to the oracle. The oracle check each field 
+                                    of the hypotesis and then says to the robot if the hypothesis is correct or not.
+                                    Internally the oracle says for each of the three fields if it is correct or not.
+                                    In this way, for example, if the robot knows that Mrs Peacock is the killer next 
+                                    time that acquire hints avoids to acquire new hints for the killer.
+                                    This is a chooice, in order to do not grow exponencially the number of hypothesis
+                                    before knowing the solution.\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacecluedo__fsm_a0b7022e33adb2ba2565717bc162d2595}\label{namespacecluedo__fsm_a0b7022e33adb2ba2565717bc162d2595}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!cut\_string@{cut\_string}}
+\index{cut\_string@{cut\_string}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{cut\_string()}{cut\_string()}}
+{\footnotesize\ttfamily def cluedo\+\_\+fsm.\+cut\+\_\+string (\begin{DoxyParamCaption}\item[{}]{string }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Simple function to cut the armor response string
+Args:
+        string:string to cut
+Returns:
+        string:string cutted
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecluedo__fsm_a750668964c31557290ac9db1e21125ff}\label{namespacecluedo__fsm_a750668964c31557290ac9db1e21125ff}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!main@{main}}
+\index{main@{main}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily def cluedo\+\_\+fsm.\+main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Body of the main function
+Initialize the node as cluedo_FSM
+Create a client of the armor server to deal with armor
+Create a client of the hp_convalidation server to says the hypothesis to the oracle
+Create a client of the make_hint server to acquire hints
+Create a client of the time_to_move server to calculate the time needed to change room
+Create the SMACH state machine and define the outcomes of FSM as CASE_SOLVED
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacecluedo__fsm_a253b88c0ef6cf0ccba8f33bf58b8cecb}\label{namespacecluedo__fsm_a253b88c0ef6cf0ccba8f33bf58b8cecb}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!armor\_client@{armor\_client}}
+\index{armor\_client@{armor\_client}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{armor\_client}{armor\_client}}
+{\footnotesize\ttfamily cluedo\+\_\+fsm.\+armor\+\_\+client = None}
+
+
+
+Global Variables. 
+
+Define the armor server \mbox{\Hypertarget{namespacecluedo__fsm_a498e4caa046c79a29d47452417724d6a}\label{namespacecluedo__fsm_a498e4caa046c79a29d47452417724d6a}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!client\_name@{client\_name}}
+\index{client\_name@{client\_name}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{client\_name}{client\_name}}
+{\footnotesize\ttfamily cluedo\+\_\+fsm.\+client\+\_\+name}
+
+\mbox{\Hypertarget{namespacecluedo__fsm_ada2c2e132d7c7afb878d47e7ce449008}\label{namespacecluedo__fsm_ada2c2e132d7c7afb878d47e7ce449008}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!completed\_hp@{completed\_hp}}
+\index{completed\_hp@{completed\_hp}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{completed\_hp}{completed\_hp}}
+{\footnotesize\ttfamily bool cluedo\+\_\+fsm.\+completed\+\_\+hp = False}
+
+
+
+boolean for completed hypothesis 
+
+\mbox{\Hypertarget{namespacecluedo__fsm_a2e17f93a39e5ceb36a55c5fd7ea7e20e}\label{namespacecluedo__fsm_a2e17f93a39e5ceb36a55c5fd7ea7e20e}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!from\_room@{from\_room}}
+\index{from\_room@{from\_room}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{from\_room}{from\_room}}
+{\footnotesize\ttfamily string cluedo\+\_\+fsm.\+from\+\_\+room = \textquotesingle{}Cluedo\+\_\+\+Room\textquotesingle{}}
+
+
+
+variables to compute time to change room Suppose the robot starts in the cluedo room 
+
+\mbox{\Hypertarget{namespacecluedo__fsm_ace434ad0d48bd0ab13adc2eace97006d}\label{namespacecluedo__fsm_ace434ad0d48bd0ab13adc2eace97006d}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!HP\_counter@{HP\_counter}}
+\index{HP\_counter@{HP\_counter}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{HP\_counter}{HP\_counter}}
+{\footnotesize\ttfamily int cluedo\+\_\+fsm.\+H\+P\+\_\+counter = 0}
+
+
+
+hypothesis counter 
+
+\mbox{\Hypertarget{namespacecluedo__fsm_a281303730cdf039b2065890ca69f2e8a}\label{namespacecluedo__fsm_a281303730cdf039b2065890ca69f2e8a}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!inconsistent\_count@{inconsistent\_count}}
+\index{inconsistent\_count@{inconsistent\_count}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{inconsistent\_count}{inconsistent\_count}}
+{\footnotesize\ttfamily int cluedo\+\_\+fsm.\+inconsistent\+\_\+count = 1}
+
+
+
+varialable to generate a inconsistent hypotesis 
+
+\mbox{\Hypertarget{namespacecluedo__fsm_abca74d1fec9b57b0a014f07fe7bba121}\label{namespacecluedo__fsm_abca74d1fec9b57b0a014f07fe7bba121}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!inconsistent\_list@{inconsistent\_list}}
+\index{inconsistent\_list@{inconsistent\_list}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{inconsistent\_list}{inconsistent\_list}}
+{\footnotesize\ttfamily string cluedo\+\_\+fsm.\+inconsistent\+\_\+list = \textquotesingle{}\textquotesingle{}}
+
+\mbox{\Hypertarget{namespacecluedo__fsm_a82ff877b634604c5dcc700181d75ede1}\label{namespacecluedo__fsm_a82ff877b634604c5dcc700181d75ede1}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!path@{path}}
+\index{path@{path}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{path}{path}}
+{\footnotesize\ttfamily cluedo\+\_\+fsm.\+path = None}
+
+
+
+path to save the onrology 
+
+\mbox{\Hypertarget{namespacecluedo__fsm_af5c55da96f7f31ff924d43f052f8610b}\label{namespacecluedo__fsm_af5c55da96f7f31ff924d43f052f8610b}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!reference\_name@{reference\_name}}
+\index{reference\_name@{reference\_name}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{reference\_name}{reference\_name}}
+{\footnotesize\ttfamily cluedo\+\_\+fsm.\+reference\+\_\+name}
+
+\mbox{\Hypertarget{namespacecluedo__fsm_abacce27704a3f874f6da8641663d8fa5}\label{namespacecluedo__fsm_abacce27704a3f874f6da8641663d8fa5}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!req@{req}}
+\index{req@{req}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{req}{req}}
+{\footnotesize\ttfamily cluedo\+\_\+fsm.\+req = Armor\+Directive\+Req()}
+
+\mbox{\Hypertarget{namespacecluedo__fsm_a5d13e34664446089ad4b644154af68d2}\label{namespacecluedo__fsm_a5d13e34664446089ad4b644154af68d2}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!time\_to\_detect@{time\_to\_detect}}
+\index{time\_to\_detect@{time\_to\_detect}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{time\_to\_detect}{time\_to\_detect}}
+{\footnotesize\ttfamily int cluedo\+\_\+fsm.\+time\+\_\+to\+\_\+detect = 3}
+
+
+
+time to detect hints in seconds 
+
+\mbox{\Hypertarget{namespacecluedo__fsm_abdcd34fe10d4169a74eb8be55d2c8c8a}\label{namespacecluedo__fsm_abdcd34fe10d4169a74eb8be55d2c8c8a}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!to\_room@{to\_room}}
+\index{to\_room@{to\_room}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{to\_room}{to\_room}}
+{\footnotesize\ttfamily cluedo\+\_\+fsm.\+to\+\_\+room = None}
+
+\mbox{\Hypertarget{namespacecluedo__fsm_a14f6d36607be3ee2526daf9d78dfaa19}\label{namespacecluedo__fsm_a14f6d36607be3ee2526daf9d78dfaa19}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!true\_what@{true\_what}}
+\index{true\_what@{true\_what}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{true\_what}{true\_what}}
+{\footnotesize\ttfamily bool cluedo\+\_\+fsm.\+true\+\_\+what = False}
+
+\mbox{\Hypertarget{namespacecluedo__fsm_adfb69991706d7dbf50d8c208ee56ae2a}\label{namespacecluedo__fsm_adfb69991706d7dbf50d8c208ee56ae2a}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!true\_where@{true\_where}}
+\index{true\_where@{true\_where}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{true\_where}{true\_where}}
+{\footnotesize\ttfamily bool cluedo\+\_\+fsm.\+true\+\_\+where = False}
+
+\mbox{\Hypertarget{namespacecluedo__fsm_aba48991961dfa2dbe4e8ebf914fee53b}\label{namespacecluedo__fsm_aba48991961dfa2dbe4e8ebf914fee53b}} 
+\index{cluedo\_fsm@{cluedo\_fsm}!true\_who@{true\_who}}
+\index{true\_who@{true\_who}!cluedo\_fsm@{cluedo\_fsm}}
+\doxysubsubsection{\texorpdfstring{true\_who}{true\_who}}
+{\footnotesize\ttfamily bool cluedo\+\_\+fsm.\+true\+\_\+who = False}
+
+
+
+boolean values for the hints 
+
