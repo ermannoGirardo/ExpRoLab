@@ -61,7 +61,8 @@ The following is a component diagram of the architecture of the project that is 
                           "from_room" and "to_roomm" and the servervice return a float32 that is the time computed. This is possible through a dictionary of the rooms 
                           as in the figure of Cluedo's map above.
 ## Documentation:
-You can find all the sphinx documentation into the docs folder.
+You can find sphinx documentation into /build/html index.html file.
+Open it with firefox and you should see the documentation about the four python scripts.
 In particular you can find more details about the source code.
 
 ## Launch:
