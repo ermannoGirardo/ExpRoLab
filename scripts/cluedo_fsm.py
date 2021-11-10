@@ -259,7 +259,27 @@ class Acquire_Hints(smach.State):
 			req.args = ['who',hypothesis,userdata.killer]
 			res=armor_client(req).armor_response.success
 			if(res==False):
-				print('Error to add the killer to: ' + str(hypothesis))	
+				print('Error to add the killer to: ' + str(hypothesis))
+		##And if the place is not known yet
+		if((inconsistent_count % 3 == 0)and(true_where==False)):
+			killer_place=make_hint_client('where').hint
+			killer_place=cut_string(killer_place)
+			userdata.killer_place=killer_place
+			print('Detect a hint: the place is: ' + str (userdata.killer_place))
+			req.args = ['where',hypothesis,userdata.killer_place]
+			res=armor_client(req).armor_response.success
+			if(res==False):
+				print('Error to add the place to: ' + str(hypothesis))
+		##And if the weapon is not known yet
+		if((inconsistent_count % 3 == 0)and(true_what==False)):
+			killer_weapon=make_hint_client('what').hint
+			killer_weapon=cut_string(killer_weapon)
+			userdata.killer_weapon=killer_weapon
+			print('Detect a hint: the weapon is: ' + str (userdata.killer_weapon))
+			req.args = ['what',hypothesis,userdata.killer_weapon]
+			res=armor_client(req).armor_response.success
+			if(res==False):
+				print('Error to add the weapon to: ' + str(hypothesis))
 		##UPDATE the ontology
 		req.command = 'REASON'
 		req.primary_command_spec = ''
@@ -429,8 +449,4 @@ def main():
 
 if __name__ == '__main__':
 	main()                         
-
-
-
-
 
