@@ -80,6 +80,9 @@ In particular you can find more details about the source code.
 * There is also a second launch file, load_start_game.sh, wich uses gnome terminals to execute all the nodes in a correct way.
 ## Ontology
 You can find a cluedo_ontology.owl file wich contains all the instance of persons,places and weapons for cluedo table game as in the figure above.
+## Video
+You cand find [here](https://unigeit-my.sharepoint.com/:v:/g/personal/s4506472_studenti_unige_it/EcG9HlKtvytCr-Hlny5G858BvnVPPIGENd_ryc58WfZN3A?e=FPhost) 
+the explanatory video of the project.
 
 # How to start the Simulation:
 !!!Note!!! that this package works for sure for ROS noetic, for other ROS version is not already tested.
