@@ -31,6 +31,9 @@ The following is a component diagram of the architecture of the project that is 
 
 ![CluedoArchitecture](https://user-images.githubusercontent.com/48509825/140076637-6e1165c7-56ed-4710-b3fd-2af7de0a5079.jpg)
 
+
+![TemporalDiagramCluedo](https://user-images.githubusercontent.com/48509825/141024880-c7cbf1dc-1c02-4ab7-ad46-556dda409fd9.jpg)
+
 # What you can find in this repository
 ## Scripts:
   * cluedo_fsm.py --> This is the FSM that simulate the cluedo game. It is developed as three states:
@@ -116,10 +119,11 @@ If you want to change the instances of the correct hypothesis, you can do it, bu
   ```
 
 
-
-
-
-
-
+# Drawbacks:
+In this case is a good solution to load directly an ontology.
+Instead for large size of data, the better solution is to load an empty ontology and then fill run time it, in order to do not slow down the execution.
+The inconsistent hypothesis is generated every three hypothesis.
+This is a design choice.
+Another approach could be to generate randomly the inconsistent hypothesis.
 
 
