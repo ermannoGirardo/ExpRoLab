@@ -83,6 +83,7 @@ You can find a cluedo_ontology.owl file wich contains all the instance of person
 ## Video
 You cand find [here](https://unigeit-my.sharepoint.com/:v:/g/personal/s4506472_studenti_unige_it/EcG9HlKtvytCr-Hlny5G858BvnVPPIGENd_ryc58WfZN3A?e=FPhost) 
 the explanatory video of the project.
+If the resolution is not enough to understand, I suggest to download the video.
 
 # How to start the Simulation:
 !!!Note!!! that this package works for sure for ROS noetic, for other ROS version is not already tested.
