@@ -63,6 +63,13 @@ The following is a component diagram of the architecture of the project that is 
                           Then assuming an average velocity of 1 m/s , the time is simply evaluated. Via a custom service time_to_momve is possible to pass two strings
                           "from_room" and "to_roomm" and the servervice return a float32 that is the time computed. This is possible through a dictionary of the rooms 
                           as in the figure of Cluedo's map above.
+			  
+  
+## State Diagram:
+
+![State Diagram](https://user-images.githubusercontent.com/48509825/174685435-faaefa26-09f5-47d9-bf62-160efb1389c5.png)
+
+  
 ## Documentation:
 You can find sphinx documentation into /build/html **index.html** file.
 Open it with firefox and you should see the documentation about the four python scripts.
