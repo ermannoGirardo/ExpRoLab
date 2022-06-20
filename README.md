@@ -36,14 +36,14 @@ The following is a component diagram of the architecture of the project that is 
 
 # What you can find in this repository
 ## Scripts:
-  * cluedo_fsm.py --> This is the FSM that simulate the cluedo game. It is developed as three states:
-    1) Motion:  The robot starting from the Cluedo Room has to move to another room in order to acquire hints.
+  * ***cluedo_fsm.py*** --> This is the FSM that simulate the cluedo game. It is developed as three states:
+    1) **Motion:**  The robot starting from the Cluedo Room has to move to another room in order to acquire hints.
 			 This state simulate the motion of the robot, asking to simulation_time custom server to compute the time needed to move from a room to another room.
-    2) Acquire Hints: Once the robot is arrived into the room, starts to acquire hints.
+    2) **Acquire Hints:** Once the robot is arrived into the room, starts to acquire hints.
 			 There is a call to the oracle to making a hint. Via a custom service the oracle randomically chooses an instance of type specified by the client
 			 and return a string of the instace to the client. If the hypotesis is completed and not consistent then go to the next state 
 			 on the contrary if it is not return to moving state and  the Robot should build a new hypotesis.
-    3) Tell Hypothesis: Once an hypotesis is completed and consistent the robot should go to the Cluedo Room and tell the hypotesis to the oracle. 
+    3) **Tell Hypothesis:** Once an hypotesis is completed and consistent the robot should go to the Cluedo Room and tell the hypotesis to the oracle. 
        The oracle check each field of the hypotesis and then says to the robot if the hypothesis is correct or not.
        Internally the oracle says for each of the three fields if it is correct or not. In this way, for example, if the robot knows that Mrs Peacock is the killer next 
 			 time that acquire hints avoids to acquire new hints for the killer. This is a chooice, in order to do not grow exponencially the number of hypothesis 
@@ -51,25 +51,25 @@ The following is a component diagram of the architecture of the project that is 
        Another projectual choice is the fact that the robot for the most of the time acquires completed hypothesis. In order to show that the algorithm works also with 
        inconsistent hypothesis one every three hypothesis is inconsistent. Of course if the hypothesis is inconsistent the robot could not go to Cluedo Room but has to 
        go to another room and search new hints.
-  * the_oracle.py --> Is the oracle node. He has to achieve two important task, developed via two custom services:
+  * ***the_oracle.py*** --> Is the oracle node. He has to achieve two important task, developed via two custom services:
     1) Make randomic hints when the robot is arrived into a room. This is done via a custom service make_hint, a client is declared into the cluedo_fsm node
        that simply does a call to the service, passing a string of the type of hints the robot wants. The service response with an hint of the type specified.
        In order to make a hint the oracle make a query to the armor server.
     2) Once the robot has a complete and consistent hypothesis, it goes to the Cluedo Room and though a custom service, hp_convalidation, the robot is able to ask for
        each type of hints if is correct or not.
-  * load_ontology.py --> this node has the purpose of loading the ontology into the armor server, passing an ontology already delevoped with all the hints possibles
+  * ***load_ontology.py*** --> this node has the purpose of loading the ontology into the armor server, passing an ontology already delevoped with all the hints possibles
                          in the figure above.  In order to do this all the armor parameters  must be setted properly.
-  * simulation_time.py --> This node has the purpose of compute the euclidian distance between the robot where the robot is and the room that the robot wants to move.
+  * **simulation_time.py** --> This node has the purpose of compute the euclidian distance between the robot where the robot is and the room that the robot wants to move.
                           Then assuming an average velocity of 1 m/s , the time is simply evaluated. Via a custom service time_to_momve is possible to pass two strings
                           "from_room" and "to_roomm" and the servervice return a float32 that is the time computed. This is possible through a dictionary of the rooms 
                           as in the figure of Cluedo's map above.
 ## Documentation:
-You can find sphinx documentation into /build/html index.html file.
+You can find sphinx documentation into /build/html **index.html** file.
 Open it with firefox and you should see the documentation about the four python scripts.
 In particular you can find more details about the source code.
 
 ## Launch:
-* There is a launch file into the launch folder: start_load.launch
+* There is a launch file into the launch folder: **start_load.launch**
   This launch file execute all the nodes described above except for cluedo_fsm.py.
   Is not possible to put all into the same launch file because before execute cluedo_fsm a few seconds are passing.
   This file load all the ros parameter needed to play Cluedo, in particular:
@@ -77,7 +77,7 @@ In particular you can find more details about the source code.
     2) what: string referred to the name of killer's weapon
     3) where: string regerred to the name of killer's room
     4) path_to_load: is the absolute path referred to where the system should take 
-* There is also a second launch file, load_start_game.sh, wich uses gnome terminals to execute all the nodes in a correct way.
+* There is also a second launch file, **load_start_game.sh**, wich uses gnome terminals to execute all the nodes in a correct way.
 ## Ontology
 You can find a cluedo_ontology.owl file wich contains all the instance of persons,places and weapons for cluedo table game as in the figure above.
 ## Video
