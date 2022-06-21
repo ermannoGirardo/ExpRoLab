@@ -88,7 +88,7 @@ In particular you can find more details about the source code.
 ## Ontology
 You can find a cluedo_ontology.owl file wich contains all the instance of persons,places and weapons for cluedo table game as in the figure above.
 ## Video
-You cand find [here](https://unigeit-my.sharepoint.com/:v:/g/personal/s4506472_studenti_unige_it/EcG9HlKtvytCr-Hlny5G858BvnVPPIGENd_ryc58WfZN3A?e=FPhost) 
+You cand find [here](https://unigeit-my.sharepoint.com/:v:/g/personal/s4506472_studenti_unige_it/ERf8BnEkFPpBg-xsGQby12ABRHWqDgvLK4BEvWn9sVV7yw?e=7WTuBE) 
 the explanatory video of the project.
 If the resolution is not enough to understand, I suggest to download the video.
 
