@@ -114,7 +114,7 @@ If you want to change the instances of the correct hypothesis, you can do it, bu
   ```
   rosrun exproblab_assignment_1 cluedo_fsm.py
   ```
-* For the second solution I create load_start_game.sh which uses gnome terminals.
+* For the second solution I have created a bash file  **load_start_game.sh** which uses gnome terminals.
   In this way is possible the automatical execution of cluedo_fsm.py after few seconds the execution of the launch file.
   So, first you have to install gnome terminal, if you haven't yet:
   ```
@@ -129,12 +129,36 @@ If you want to change the instances of the correct hypothesis, you can do it, bu
   ./load_start_game
   ```
 
+#System Features
+* Final State Machine to collect hypotheses until a solution is found
+* Room position in Figure 1 is reproduced and ad hoc service computes the time needed to go from a room to another, considering 1 m/s velocity
+* Smach Viewer display the FSM states
+* The ontology is managed by Armor
 
-# Drawbacks:
-In this case is a good solution to load directly an ontology.
-Instead for large size of data, the better solution is to load an empty ontology and then fill run time it, in order to do not slow down the execution.
-The inconsistent hypothesis is generated every three hypothesis.
-This is a design choice.
-Another approach could be to generate randomly the inconsistent hypothesis.
+
+
+
+# System Limitations and Possible Improvements:
+1) In this case is a good solution to load directly an ontology, although it is not a good method.
+
+1) Instead for large size of data, the better solution is to load an empty ontology and then fill run time it, in order to do not slow down the execution.
+
+2) The inconsistent hypothesis is generated every three hypothesis. This is a design choice.
+
+2) Another approach could be to generate randomly the inconsistent hypothesis.
+
+3) 
+
+
+# About the Author
+**Robotics Engineer** @Università degli Studi di Genova via Opera Pia. 
+
+**Phone number:** +39 3451552733
+
+**Email:** girardoermanno@gmail.com
+
+**GitHub Page:** [Click Here](https://github.com/ermannoGirardo)
+
+**Assignment 3:** [Click Here](https://github.com/ermannoGirardo/exproblab_assignment3)
 
 
